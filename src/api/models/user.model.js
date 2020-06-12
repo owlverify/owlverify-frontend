@@ -113,12 +113,14 @@ userSchema.statics = {
       if (user)
         return fn('This email is already in use.')
 
+      let u = this
+
       let salt = crypto.randomBytes(128).toString('base64')
       crypto.pbkdf2(password, salt, 5000, 32, 'sha512', (err, derivedKey) => {
         if (err)
           return fn('There has been an internal error. Please try again later.')
 
-        this.insert({
+        u.insert({
           email: email,
           password: new Buffer(derivedKey).toString('base64'),
           salt: salt,
