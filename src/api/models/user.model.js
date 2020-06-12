@@ -93,7 +93,7 @@ userSchema.statics = {
     }
   },
 
-  create: (data, fn) => {
+  async create (data, fn) {
     if (!data)
       return fn('No data provided')
 
@@ -106,11 +106,12 @@ userSchema.statics = {
     if (password.length < 6)
       return fn('Password should have at least six characters')
 
-    this.findOne({ email }, (err, doc) => {
+    try {
+      let user = this.findOne({ email }).exec()
       if (err)
         return fn('There has been an internal error. Please try again later.')
 
-      if (doc)
+      if (user)
         return fn('This email is already in use.')
 
       let salt = crypto.randomBytes(128).toString('base64')
@@ -130,7 +131,11 @@ userSchema.statics = {
           })
         })
       })
-    })
+
+    } catch (e) {
+      console.log(e)
+      return fn('There has been an internal error. Please try again later.')
+    }
   }
 }
 
