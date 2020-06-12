@@ -2,7 +2,7 @@
   "name": "owlverify-frontend",
   "version": "1.0.0",
   "description": "owlverify-frontend",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,17 +17,26 @@
   },
   "homepage": "https://github.com/owlverify/owlverify-frontend#readme",
   "dependencies": {
+    "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "connect-mongo": "^3.2.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
+    "dotenv-safe": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
+    "express-validation": "^3.0.5",
     "flash": "^1.1.0",
     "helmet": "^3.22.1",
+    "http-status": "^1.4.2",
     "liquidjs": "^9.12.0",
+    "method-override": "^3.0.0",
     "moment": "^2.26.0",
     "mongodb": "^3.5.8",
-    "serve-favicon": "^2.5.0"
+    "mongoose": "^5.9.18",
+    "morgan": "^1.10.0",
+    "serve-favicon": "^2.5.0",
+    "winston": "^3.2.1"
   }
 }
