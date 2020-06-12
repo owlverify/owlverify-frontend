@@ -7,6 +7,9 @@ const sessionStore = require('connect-mongo')(session)
 const methodOverride = require('method-override')
 const cors = require('cors')
 const helmet = require('helmet')
+const path = require('path');
+const flash = require('flash');
+const favicon = require('serve-favicon');
 
 const Liquid = require('liquidjs').Liquid
 const engine = new Liquid()
