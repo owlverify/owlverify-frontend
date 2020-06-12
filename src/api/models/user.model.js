@@ -108,8 +108,6 @@ userSchema.statics = {
 
     try {
       let user = this.findOne({ email }).exec()
-      if (err)
-        return fn('There has been an internal error. Please try again later.')
 
       if (user)
         return fn('This email is already in use.')
