@@ -79,7 +79,7 @@ dbo.connect(err => {
     secret: process.env.SESSION_KEY,
     maxAge: 3600000 * 24 * 365,
     store: new sessionStore({
-      db: dbo.db(),
+      client: dbo.db(),
       ttl: 3600000 * 24 * 365
     }),
     resave: false,
