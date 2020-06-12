@@ -63,7 +63,7 @@ engine.registerFilter('colour', v => {
   return 'hsl(' + shortened + ',90%,70%)'
 })
 
-const publicRoutes = require('../public/routes')
+const publicRoutes = require('../public_html/routes')
 const { logs } = require('./vars')
 const error = require('../api/middlewares/error')
 
@@ -112,7 +112,7 @@ app.use(helmet())
 // enable CORS - Cross Origin Resource Sharing
 app.use(cors())
 
-require('../public/routes')(app)
+require('../public_html/routes')(app)
 
 // if error is not an instanceOf APIError, convert it.
 app.use(error.converter)
