@@ -1,10 +1,10 @@
 render = require('../../api/lib/utils.js').render
 
 module.exports = app => {
-  // Signup
-  app.get('/signup', (req, res) => {
-    res.render('signup', render(req, {
-      title: 'Signup'
+  // Login
+  app.get('/login', (req, res) => {
+    res.render('login', render(req, {
+      title: 'Login'
     }));
   });
 }
