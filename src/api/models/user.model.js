@@ -49,7 +49,7 @@ userSchema.statics = {
   /**
    * Login User
    */
-  async sessionLogin (options) {
+  async sessionLogin (options, fn) {
     if (!options)
       return fn('No data provided.')
 
