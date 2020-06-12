@@ -26,4 +26,10 @@ module.exports = app => {
       return res.redirect('/dashboard')
     })
   })
+
+  app.get('/files', (req, res) => {
+    res.render('files', render(req, {
+      title: 'Files'
+    }))
+  })
 }

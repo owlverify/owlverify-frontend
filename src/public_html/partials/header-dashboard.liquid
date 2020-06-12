@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <title>{{ title }}</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="//fonts.googleapis.com/css?family=Rubik:400,500" rel="stylesheet" type="text/css">
+
+  <link rel="stylesheet" href="/css/normalize.css">
+  <link rel="stylesheet" href="/css/skeleton.css">
+  <link rel="stylesheet" href="/css/style.css?01022019">
+  <link rel="stylesheet" href="/css/feather.css">
+  <link rel="icon" href="/favicon.ico">
+  {{ _css }}
+
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="row">
+      <div class="one columns">
+        <span class="headway" style="position:absolute;left:24px"></span>
+        <h5><a href="/"><i class="icon-bar-graph-2"></i></a></h5>
+      </div>
+      <div class="nine columns">
+        {% if acc_active_domain %}
+        <ul class="left">
+          <li><a href="/files"{% if page == 'files' %} class="active"{% endif %}>Files</a></li>
+        </ul>
+        {% else %}&nbsp;{% endif %}
+      </div>
+      <div class="two columns align-right">
+        {% if acc_active_domain %}
+        <ul>
+          <li class="has-sub">
+            <a href=""><strong>{{ acc_active_domain.domain }}</strong> <i class="icon-head"></i></a>
+            <ul class="subnav">
+              <li><a href="/settings">Domain Settings</a></li>
+              <li><a href="/profile">Profile Settings</a></li>
+              <li><a href="/logout">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+</header>

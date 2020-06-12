@@ -1,0 +1,128 @@
+{% include 'partials/header-dashboard.liquid' %}
+
+<section>
+  <div class="container">
+    <!--
+      Country
+      Device OS
+      Clients
+      Platform (mobile/desktop~)
+      Top clicks
+      Top opens
+      Time graph of engagement
+    -->
+    <div class="row pad-btm">
+      <div class="six columns">
+        <a href="/users">Users</a> <i class="icon-fast-forward"></i>
+        <h5>{{ data.email }}</h5>
+        <small><a href="#" class="small-button mail">Quick Mail</a></small>
+        {% if error %}<p class="error">{{ error }}</p>{% endif %}
+        {% if info %}<p class="info">{{ info }}</p>{% endif %}
+      </div>
+      {% assign or = data.unique_opens | times: 100 | divided_by: data.deliveries | round: 2 %}
+      {% assign ctr = data.urls | size | times: 100 | divided_by: data.deliveries | round: 2 %}
+      <div class="six columns">
+        <div class="row grid">
+          <div class="three columns">
+            deliveries <h5 class="inline">{{ data.deliveries }}</h5><br>
+            <span>&nbsp;</span>
+          </div>
+          <div class="five columns">
+            opens <h5 class="inline">{{ data.opens }}</h5><br>
+            <span class="fade">{{ data.unique_opens }} unique, {{ or }}% open rate</span>
+          </div>
+          <div class="four columns">
+            clicks <h5 class="inline">{{ data.clicks }}</h5><br>
+            <span class="fade">{{ data.urls | size }} unique, {{ ctr }}% CTR</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="eight columns">
+        <div class="feed">
+          {% assign last_msg_id = "" %}
+          {% for log in data.logs %}
+
+            {% if log.msg_id != last_msg_id %}
+            {% if last_msg_id != "" %}</ul></div></div>{% endif %}
+            <div class="row">
+              <div class="twelve columns">
+                <a href="/mails/{{ log.msg_id }}">{{ log.subject }}</a>
+                <ul class="timeline">
+                {% endif %}
+
+                <li>
+                  <div class="line"></div>
+                  <date>{{ log.timeago }}</date>
+                  {% if log.event == 'clicked' %}
+                    <span class="tag green">{{ log.event }}</span> <a href="/links/{{ log.url | url_encode }}" class="break-words">{{ log.url }}</a> <a href="{{ log.url }}" target="_blank" rel="noopener noreferrer"><i class="icon-open fade"></i></a>
+                  {% elsif log.event == 'opened' %}
+                    <span class="tag yellow">{{ log.event }}</span> <span class="fade">{{ log.client }} on {{ log.os }} ({{ log.platform }}){%if log.city != 'Unknown' %}, {{ log.city }}{% endif %}{%if log.country != 'Unknown' %}, {{ log.country }}{% endif %}</span>
+                  {% elsif log.event == 'dropped' %}
+                    <span class="tag red">{{ log.event }}</span> <span class="fade">{{ log.description }}</span>
+                  {% elsif log.event == 'bounced' %}
+                    <span class="tag pink">{{ log.event }}</span><span class="fade">{{ log.error }}</span>
+                  {% else %}
+                    <span class="tag">{{ log.event }}</span><!--a href="/mails/{{ log.msg_id }}">{{ log.subject }}</a-->
+                  {% endif %}
+                </li>
+
+              {% assign last_msg_id = log.msg_id %}
+            {% endfor %}
+            {% if last_msg_id != "" %}</ul></div></div>{% endif %}
+          </div>
+        </div>
+      <div class="four columns">
+        <p><strong>Clicks</strong></p>
+        <ul class="list break-words">
+          {% for url in data.urls %}
+            <li><a href="/links/{{ url | url_encode }}">{{ url }}</a> <a href="{{ url }}" target="_blank" rel="noopener noreferrer"><i class="icon-open fade"></i></a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="modal hide">
+  <a href="#" class="close">Close <i class="icon-cross"></i></a>
+  <div style="margin:100px 50px">
+    <form method="post">
+      <h5><span class="fade">To:</span> {{ data.email }}</h5>
+      <div class="row top-10">
+        <div class="six columns">
+          <label>From (name)</label>
+          <input type="text" name="name" class="u-full-width" required>
+        </div>
+        <div class="six columns">
+          <label>From (email)</label>
+          <input type="email" name="from" class="u-full-width" required>
+        </div>
+      </div>
+      <label class="top-10">Subject</label>
+      <input type="text" name="subject" class="u-full-width" required>
+      <label class="top-10">Body</label>
+      <textarea name="body" class="u-full-width" style="height:300px" required></textarea>
+      <button type="submit" class="u-full-width button-primary">Send</button>
+    </form>
+  </div>
+</div>
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript">
+$('.mail, .close').on('click', function() {
+  $('.modal').toggleClass('hide');
+  return false;
+});
+$(document).keyup(function(e) {
+  if (e.keyCode == 27) {
+    if (!$('.modal').hasClass('hide'))
+      $('.modal').toggleClass('hide');
+  }
+});
+$('.modal form').on('submit', function() {
+  $(this).find(':button').attr('disabled', 'disabled');
+});
+</script>
+
+{% include 'partials/footer.liquid' %}
