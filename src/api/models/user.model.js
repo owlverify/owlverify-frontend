@@ -107,7 +107,7 @@ userSchema.statics = {
       return fn('Password should have at least six characters')
 
     try {
-      let user = this.findOne({ email }).exec()
+      let user = await this.findOne({ email }).exec()
 
       console.log(user)
       if (user)
