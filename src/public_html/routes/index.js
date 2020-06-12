@@ -9,6 +9,18 @@ module.exports = app => {
     }))
   })
 
+  app.post('/signup', (req, res) => {
+    User.create(req.body, (err, user) => {
+      if (err) {
+        req.flash('error', err)
+        return res.redirect('/signup')
+      }
+
+      res.session.account = user
+      return res.redirect('/dashboard')
+    })
+  })
+
   // Login
   app.get('/login', (req, res) => {
     res.render('login', render(req, {

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 const crypto = require('crypto')
 
 /**
@@ -91,6 +91,46 @@ userSchema.statics = {
       console.log(e)
       return fn('There has been an internal error. Please try again later.')
     }
+  },
+
+  create: (data, fn) => {
+    if (!data)
+      return fn('No data provided')
+
+    let email = data.email || ''
+    let password = data.password || ''
+
+    email = email.toLowerCase().trim()
+    if (!/^\S+@\S+$/.test(email))
+      return fn('Email invalid. Confirm and try again')
+    if (password.length < 6)
+      return fn('Password should have at least six characters')
+
+    this.findOne({ email }, (err, doc) => {
+      if (err)
+        return fn('There has been an internal error. Please try again later.')
+
+      if (doc)
+        return fn('This email is already in use.')
+
+      let salt = crypto.randomBytes(128).toString('base64')
+      crypto.pbkdf2(password, salt, 5000, 32, 'sha512', (err, derivedKey) => {
+        if (err)
+          return fn('There has been an internal error. Please try again later.')
+
+        this.insert({
+          email: email,
+          password: new Buffer(derivedKey).toString('base64'),
+          salt: salt,
+          reg_date: new Date()
+        }, (err, result) => {
+          return fn(null, {
+            id: result.ops[0]._id,
+            email: result.ops[0].email,
+          })
+        })
+      })
+    })
   }
 }
 
