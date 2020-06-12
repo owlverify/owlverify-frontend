@@ -5,6 +5,7 @@ const compress = require('compression')
 const methodOverride = require('method-override')
 const cors = require('cors')
 const helmet = require('helmet')
+const publicRoutes = require('../public/routes');
 const { logs } = require('./vars')
 const error = require('../api/middlewares/error')
 
@@ -33,6 +34,8 @@ app.use(helmet())
 
 // enable CORS - Cross Origin Resource Sharing
 app.use(cors())
+
+require('../public/routes')(app);
 
 // if error is not an instanceOf APIError, convert it.
 app.use(error.converter)

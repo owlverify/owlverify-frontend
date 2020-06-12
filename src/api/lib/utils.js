@@ -1,6 +1,3 @@
-const crypto = require('crypto')
-const algorithm = 'aes-256-ctr'
-
 // Inject some variables into template variables
 exports.render = (req, _obj) => {
   let obj = {}
