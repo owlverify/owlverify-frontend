@@ -64,23 +64,23 @@ userSchema.statics = {
       if (!user)
         return fn('User not found.')
 
-      crypto.pbkdf2(password, doc.salt, 5000, 32, 'sha512', async (err, derivedKey) => {
+      crypto.pbkdf2(password, user.salt, 5000, 32, 'sha512', async (err, derivedKey) => {
         if (err)
           return fn('There has been an internal error. Please try again later.')
 
         let hash = new Buffer(derivedKey).toString('base64')
-        if (hash !== doc.password)
+        if (hash !== user.password)
           return fn('Wrong password. Confirm and try again.')
 
         let json = {
-          id: doc._id,
-          email: doc.email,
+          id: user._id,
+          email: user.email,
           //reg_date: doc.reg_date
         }
 
         /*
-        if (doc.payid)
-          json.payid = doc.payid
+        if (user.payid)
+          json.payid = user.payid
 
         // Update last login
         //await this.update({ email: email }, { $set: { ll: new Date() } }).exec()
