@@ -92,6 +92,7 @@ app.use(session(sess));
 app.engine('liquid', engine.express());
 app.set('view engine', 'liquid');
 app.set('views', __dirname + '/../public_html');
+app.use(express.static(__dirname + '/../public_html/static'));
 app.use(favicon(path.join(__dirname, '../public_html', 'favicon.ico')));
 app.use(flash());
 
