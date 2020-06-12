@@ -88,6 +88,7 @@ userSchema.statics = {
         return fn(null, json)
       })
     } catch (e) {
+      console.log(e)
       return fn('There has been an internal error. Please try again later.')
     }
   }
