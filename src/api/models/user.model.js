@@ -109,6 +109,7 @@ userSchema.statics = {
     try {
       let user = this.findOne({ email }).exec()
 
+      console.log(user)
       if (user)
         return fn('This email is already in use.')
 
