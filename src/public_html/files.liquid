@@ -15,7 +15,7 @@
         <tr>
           <th><a href="?sort=name&dir={% if query.dir == 'desc' %}asc{% else %}desc{% endif %}">Name{% if query.sort == 'name' %} <i class="icon-arrow-{% if query.dir == 'asc' %}up{% else %}down{% endif %}"></i>{% endif %}</a></th>
           <th><a href="?sort=status&dir={% if query.dir == 'desc' %}asc{% else %}desc{% endif %}">Status{% if query.sort == 'status' %} <i class="icon-arrow-{% if query.dir == 'asc' %}up{% else %}down{% endif %}"></i>{% endif %}</a></th>
-          <th><a href="?sort=updated_at&dir={% if query.dir == 'desc' %}asc{% else %}desc{% endif %}">Update<br>At{% if query.sort == 'updated_at' %} <i class="icon-arrow-{% if query.dir == 'asc' %}up{% else %}down{% endif %}"></i>{% endif %}</a></th>
+          <th><a href="?sort=updatedAt&dir={% if query.dir == 'desc' %}asc{% else %}desc{% endif %}">Update<br>At{% if query.sort == 'updatedAt' %} <i class="icon-arrow-{% if query.dir == 'asc' %}up{% else %}down{% endif %}"></i>{% endif %}</a></th>
           <th class="center">Actions</th>
         </tr>
       </thead>
@@ -23,7 +23,7 @@
         <tr>
           <td><a href="/files/{{ file.id }}">{{ file.name }}</a></td>
           <td>{{ file.status }}</td>
-          <td class="center">{{ file.updated_at }}</td>
+          <td class="center">{{ file.updatedAt }}</td>
           <td class="center">
             Start Validate
           </td>
