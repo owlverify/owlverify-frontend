@@ -182,6 +182,15 @@ userSchema.statics = {
       console.log(e)
       return fn('There has been an internal error. Please try again later.')
     }
+  },
+
+  dashboardData(user, query, fn) {
+    let data = {
+      files: 0,
+      credits: 0
+    }
+
+    return fn(null, data)
   }
 }
 

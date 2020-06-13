@@ -85,6 +85,16 @@ module.exports = app => {
     })
   })
 
+  app.get('/dashboard', (req, res) => {
+    User.dashboardData(req.session.account, (err, data) => {
+      res.render('dashboard', render(req, {
+        title: 'Dashboard',
+        page: 'dashboard',
+        data: data
+      }))
+    })
+  })
+
   app.get('/files', (req, res) => {
     res.render('files', render(req, {
       title: 'Files',

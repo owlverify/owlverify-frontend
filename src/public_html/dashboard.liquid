@@ -1,0 +1,262 @@
+{% include 'partials/header-dashboard.liquid' %}
+
+<section>
+  <div class="container">
+    <!--
+      Country
+      Device OS
+      Clients
+      Platform (mobile/desktop~)
+      Top clicks
+      Top opens
+      Time graph of engagement
+    -->
+    {% if info %}<p class="info center">{{ info }}</p>{% endif %}
+    <div class="row">
+      <div class="twelve columns">
+        <div class="box">
+          <select name="engagement.days" class="right">
+            <option value="today"{% if query['engagement.days'] == 'today' %} selected{%endif%}>Today</option>
+            <option value="yesterday"{% if query['engagement.days'] == 'yesterday' %} selected{%endif%}>Yesterday</option>
+            <option value="7"{% if query['engagement.days'] == nil or query['engagement.days'] == '7' %} selected{%endif%}>Last 7 days</option>
+            <option value="30"{% if query['engagement.days'] == '30' %} selected{%endif%}>Last 30 days</option>
+          </select>
+          <p><strong>Engagement</strong></p>
+          <p>&nbsp;</p>
+          <canvas id="chart-engagement"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="six columns">
+        <div class="row center">
+          <div class="four columns">
+            <div class="box">
+              <p><strong>Delivered</strong></p>
+              <h5><a href="feed?action[]=delivered">{{ data.delivered | format }}</a></h5>
+              <strong><a href="feed?action[]=failed">{{ data.failed | format }}</a></strong><br>failed
+            </div>
+          </div>
+          <div class="four columns">
+            <div class="box">
+              <p><strong>Opened</strong></p>
+              <h5><a href="feed?action[]=opened">{{ data.opened | format }}</a></h5>
+              <strong>{{ data.unique_opens | format }}</strong><br>unique
+            </div>
+          </div>
+          <div class="four columns">
+            <div class="box">
+              <p><strong>Clicked</strong></p>
+              <h5><a href="feed?action[]=clicked">{{ data.clicked | format }}</a></h5>
+              <strong>{{ data.unique_clicks | format }}</strong><br>unique
+            </div>
+          </div>
+        </div>
+        {% if data.opened == 0 and data.clicked == 0 and data.delivered > 0 %}
+        <div class="box" style="background-color:#d7ecc1">
+          <p>Psst: Don't forget to turn on open and click tracking for this domain in your Mailgun/SES dashboard</p>
+        </div>
+        {% endif %}
+        {% assign or = data.unique_opens | times: 100 | divided_by: data.delivered %}
+        {% assign ctr = data.unique_clicks | times: 100 | divided_by: data.delivered %}
+        <div class="row center">
+          <div class="four columns">
+            <div class="box">
+              <p><strong><abbr title="Unique opens/Delivered">Open Rate</abbr></strong></p>
+              <h5>{{ or | round: 2 }}%</h5>
+            </div>
+          </div>
+          <div class="four columns">
+            <div class="box">
+              <p><strong><abbr title="Unique clicks/Delivered">CTR</abbr></strong></p>
+              <h5>{{ ctr | round: 2 }}%</h5>
+            </div>
+          </div>
+          <div class="four columns">
+            <div class="box">
+              <p><strong><abbr title="Unique clicks/Unique opens">CTOR</abbr></strong></p>
+              <h5>{{ data.unique_clicks | times: 100 | divided_by: data.unique_opens | round: 2 }}%</h5>
+            </div>
+          </div>
+        </div>
+        <!--div class="box">Country</div-->
+        <div class="row center">
+          <div class="four columns">
+            <div class="box">
+              <p><strong>Mails</strong></p>
+              <h4><a href="mails">{{ data.mails | format }}</a></h4>
+            </div>
+          </div>
+          <div class="four columns">
+            <div class="box">
+              <p><strong>Users</strong></p>
+              <h4><a href="users">{{ data.users | format }}</a></h4>
+            </div>
+          </div>
+          <div class="four columns">
+            <div class="box">
+              <p><strong>Feed</strong></p>
+              <h4><a href="feed">{{ data.feed | format }}</a></h4>
+            </div>
+          </div>
+        </div>
+        <div class="box">
+          <select name="top_clicks.days" class="right">
+            <option value="today"{% if query['top_clicks.days'] == 'today' %} selected{%endif%}>Today</option>
+            <option value="yesterday"{% if query['top_clicks.days'] == 'yesterday' %} selected{%endif%}>Yesterday</option>
+            <option value="7"{% if query['top_clicks.days'] == nil or query['top_clicks.days'] == '7' %} selected{%endif%}>Last 7 days</option>
+            <option value="30"{% if query['top_clicks.days'] == '30' %} selected{%endif%}>Last 30 days</option>
+          </select>
+          <p><strong>Top Clicks</strong></p>
+          <ul class="list break-words u-cf">
+            {% for url in data.clicks %}
+              <li><a href="/links/{{ url._id | url_encode }}">{{ url._id }}</a> <a href="{{ url._id }}" target="_blank" rel="noopener noreferrer"><i class="icon-open fade"></i></a> <span class="fade">({{ url.count }})</span></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      <div class="six columns">
+        <div class="row">
+          <div class="six columns">
+            <div class="box">
+              <p><strong>Platform</strong></p>
+              <canvas id="chart-platform"></canvas>
+            </div>
+          </div>
+          <div class="six columns">
+            <div class="box">
+              <p><strong>OS</strong></p>
+              <canvas id="chart-os"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="box">
+          <select name="top_opens.days" class="right">
+            <option value="today"{% if query['top_opens.days'] == 'today' %} selected{%endif%}>Today</option>
+            <option value="yesterday"{% if query['top_opens.days'] == 'yesterday' %} selected{%endif%}>Yesterday</option>
+            <option value="7"{% if query['top_opens.days'] == nil or query['top_opens.days'] == '7' %} selected{%endif%}>Last 7 days</option>
+            <option value="30"{% if query['top_opens.days'] == '30' %} selected{%endif%}>Last 30 days</option>
+          </select>
+          <p><strong>Top Opens</strong></p>
+          <ul class="list break-words u-cf">
+            {% for open in data.opens %}
+              <li><a href="/mails/{{ open._id }}">{{ open.mail.subject }}</a> <span class="fade">({{ open.count }})</span></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/Chart.min.js"></script>
+<script type="text/javascript">
+  let query = {{query}};
+  $('select').on('change', function(){
+    query[$(this).attr("name")] = $(this).val();
+    window.location = '?'+$.param(query);
+  });
+
+  //window.onload = function() {
+    Chart.defaults.global.defaultFontFamily='"Rubik", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif';
+    new Chart(document.getElementById("chart-engagement").getContext("2d"), {
+        type: 'line',
+        data: {
+            labels: {{ data.engagement.label }},
+            datasets: [{
+                label: "Delivered",
+                borderWidth: 2,
+                pointRadius: 3,
+                fill: true,
+                borderColor: '#fbce43',
+                backgroundColor: 'rgba(251, 206, 67, 0.1)',
+                pointBackgroundColor: '#fbce43',
+                data: {{ data.engagement.data.delivered }}
+            }, {
+                label: "Opened",
+                fill: true,
+                borderColor: '#3fb0ef',
+                backgroundColor: 'rgba(63, 176, 239, 0.1)',
+                pointBackgroundColor: '#3fb0ef',
+                borderWidth: 2,
+                pointRadius: 3,
+                data: {{ data.engagement.data.opened }}
+            }, {
+                label: "Clicked",
+                fill: true,
+                borderWidth: 2,
+                pointRadius: 3,
+                borderColor: '#69dd88',
+                backgroundColor: 'rgba(105, 221, 136, 0.1)',
+                pointBackgroundColor: '#69dd88',
+                data: {{ data.engagement.data.clicked }}
+            }, {
+                label: "Failed",
+                fill: true,
+                borderColor: '#e74c84',
+                backgroundColor: 'rgba(231, 76, 132, 0.1)',
+                pointBackgroundColor: '#e74c84',
+                borderWidth: 2,
+                pointRadius: 3,
+                data: {{ data.engagement.data.failed }}
+            }]
+        },
+        options: {
+            legend:{display: false},
+            responsive: true,
+            title:{display:false},
+            tooltips: {
+              mode: 'index',
+              intersect: false,
+            },
+            hover: {
+              mode: 'nearest',
+              intersect: true
+            },
+            scales: {
+              xAxes: [{
+                gridLines: {
+                  display:true
+                }
+              }],
+              yAxes: [{
+                gridLines: {
+                  display:false
+                }
+              }]
+            }
+        }
+    });
+    new Chart(document.getElementById("chart-platform").getContext("2d"), {
+      type: 'pie',
+      data: {
+        labels: {{ data.platform.labels }},
+        datasets: [{
+          borderWidth: 0,
+          backgroundColor: ['#fdd733','#ec4e8b','#4abbe4','#62d4a2','#a68dfa','#b3c9c0'],
+          data: {{ data.platform.data }}
+        }]
+      },
+      options: {
+        legend:{display: false},
+        color: 'rgba(233,233,233,0.5)'
+      }
+    });
+    new Chart(document.getElementById("chart-os").getContext("2d"), {
+      type: 'pie',
+      data: {
+        labels: {{ data.os.labels }},
+        datasets: [{
+          borderWidth: 0,
+          backgroundColor: ['#fdd733','#b3c9c0','#ec4e8b','#4abbe4','#963a97','#62d4a2','#7366fc','#a68dfa','#e1d3b2','#6a7989'],
+          data: {{ data.os.data }}
+        }]
+      },
+      options: {
+        legend:{display: false}
+      }
+    });
+  //};
+</script>
+{% include 'partials/footer.liquid' %}
