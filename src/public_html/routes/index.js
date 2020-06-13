@@ -6,6 +6,23 @@ module.exports = app => {
     res.render('index', render(req))
   })
 
+  app.get('/privacy', (req, res) => {
+    res.render('privacy', render(req, {
+      title: 'Privacy policy'
+    }))
+  })
+  app.get('/terms', (req, res) => {
+    res.render('tos', render(req, {
+      title: 'Terms of Service'
+    }))
+  })
+
+  app.get('/support', (req, res) => {
+    res.render('support', render(req, {
+      title: 'Support'
+    }))
+  })
+
   //Signup
   app.get('/signup', (req, res) => {
     res.render('signup', render(req, {
