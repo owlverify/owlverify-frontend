@@ -138,7 +138,7 @@ module.exports = app => {
     })
   })
 
-  app.post('/files/upload', upload.single('myFile'), (req, res, next) => {
+  app.post('/file/upload', upload.single('myFile'), (req, res, next) => {
     const file = req.file;
 
     console.log(file)
