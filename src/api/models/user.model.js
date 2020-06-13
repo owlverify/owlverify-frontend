@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 const crypto = require('crypto')
 
+const Recover = require('recover.model')
+
 /**
  * User Roles
  */
@@ -132,12 +134,58 @@ userSchema.statics = {
     }
   },
 
-  async recoverPassword(data, fn) {
+  async recoverPassword (data, fn) {
+    let email = data.email || ''
+    try {
+      let doc = await this.findOne({ email: email }).exec()
 
+      if (!doc)
+        return fn('The specified email does not exist.')
+
+      let salt = crypto.randomBytes(128).toString('base64')
+      let derivedKey = await crypto.pbkdf2Sync(salt, salt, 5000, 32, 'sha512')
+
+      let resetToken = Buffer.from(derivedKey).toString('base64')
+      let userId = doc._id.toHexString()
+
+      // Delete all recover requests for user
+      await Recover.deleteMany({ userId }).exec()
+
+      await (new Recover({
+        userId,
+        resetToken
+      })).save()
+
+      console.log(resetToken);
+
+      fn(null, {})
+
+      /*
+      // Add this one
+      dbo.db().collection('recover').insert({
+        hash: hash,
+        uid: uid,
+        date: new Date()
+      }, (err, result) => {
+        // Send email
+        let tmplObj = {
+          hash: encodeURIComponent(hash),
+          uid: uid,
+          domain: process.env.HOST
+        }
+
+        Mail.send(email, 'Reset your password', 'recover', tmplObj, fn)
+      })
+
+       */
+    } catch (e) {
+      console.log(e)
+      return fn('There has been an internal error. Please try again later.')
+    }
   }
 }
 
-const User = mongoose.model('Users', userSchema);
+const User = mongoose.model('Users', userSchema)
 
 /**
  * @typedef User
