@@ -148,6 +148,8 @@ module.exports = app => {
       path: file.path,
     })).save();
 
+    processInitailFile(file);
+
     return res.redirect('/files')
   })
 
