@@ -9,7 +9,7 @@
         <div class="row center">
           <div class="four columns">
             <div class="box">
-              <p><strong>Files</strong></p>
+              <p><strong>Files Uploaded</strong></p>
               <h4><a href="files">{{ data.totalFiles | format }}</a></h4>
             </div>
           </div>
@@ -37,44 +37,4 @@
 
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/js/Chart.min.js"></script>
-<script type="text/javascript">
-  let query = {{query}};
-  $('select').on('change', function(){
-    query[$(this).attr("name")] = $(this).val();
-    window.location = '?'+$.param(query);
-  });
-
-  //window.onload = function() {
-    Chart.defaults.global.defaultFontFamily='"Rubik", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif';
-    new Chart(document.getElementById("chart-platform").getContext("2d"), {
-      type: 'pie',
-      data: {
-        labels: {{ data.platform.labels }},
-        datasets: [{
-          borderWidth: 0,
-          backgroundColor: ['#fdd733','#ec4e8b','#4abbe4','#62d4a2','#a68dfa','#b3c9c0'],
-          data: {{ data.platform.data }}
-        }]
-      },
-      options: {
-        legend:{display: false},
-        color: 'rgba(233,233,233,0.5)'
-      }
-    });
-    new Chart(document.getElementById("chart-os").getContext("2d"), {
-      type: 'pie',
-      data: {
-        labels: {{ data.os.labels }},
-        datasets: [{
-          borderWidth: 0,
-          backgroundColor: ['#fdd733','#b3c9c0','#ec4e8b','#4abbe4','#963a97','#62d4a2','#7366fc','#a68dfa','#e1d3b2','#6a7989'],
-          data: {{ data.os.data }}
-        }]
-      },
-      options: {
-        legend:{display: false}
-      }
-    });
-  //};
-</script>
 {% include 'partials/footer.liquid' %}
