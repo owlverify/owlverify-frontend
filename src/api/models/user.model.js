@@ -113,18 +113,14 @@ userSchema.statics = {
         return fn('This email is already in use.')
 
       let salt = crypto.randomBytes(128).toString('base64')
-      console.log(salt)
       let derivedKey = crypto.pbkdf2Sync(password, salt, 5000, 32, 'sha512')
 
-      console.log('derivedKey', derivedKey)
       let result = await (new User({
         email: email,
         password: new Buffer(derivedKey).toString('base64'),
         salt: salt,
         //reg_date: new Date()
       })).save()
-
-      console.log(result)
 
       return fn(null, {
         id: result._id,

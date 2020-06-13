@@ -4,6 +4,7 @@ const render = require('../../api/lib/utils').render
 module.exports = app => {
   //Signup
   app.get('/signup', (req, res) => {
+    console.log(res)
     res.render('signup', render(req, {
       title: 'Signup'
     }))
