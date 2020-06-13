@@ -6,6 +6,12 @@
       <div class="row">
         <div class="twelve columns">
           <h6><span style="padding-right:15px">All Files</span></h6>
+
+           <!--  SINGLE FILE -->
+          <form action="/file/upload" enctype="multipart/form-data" method="POST">
+             <input type="file" name="myFile" />
+             <input type="submit" value="Upload a file"/>
+          </form>
         </div>
       </div>
     </div>

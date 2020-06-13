@@ -1,6 +1,18 @@
+const multer = require('multer')
 const User = require('../../api/models/user.model')
 const File = require('../../api/models/file.model')
 const render = require('../../api/lib/utils').render
+
+// SET STORAGE
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now())
+  }
+})
+var upload = multer({ storage: storage })
 
 module.exports = app => {
   app.get('/', (req, res) => {
@@ -124,6 +136,14 @@ module.exports = app => {
         data: data
       }))
     })
+  })
+
+  app.post('/files/upload', upload.single('myFile'), (req, res, next) => {
+    const file = req.file;
+
+    console.log(file)
+
+    res.status(200).send('ok')
   })
 
   // Logout
