@@ -3,6 +3,7 @@ const fs = require('fs')
 const User = require('../../api/models/user.model')
 const File = require('../../api/models/file.model')
 const render = require('../../api/lib/utils').render
+const processInitial = require('../../api/lib/processInitial')
 
 // SET STORAGE
 var storage = multer.diskStorage({
@@ -148,7 +149,7 @@ module.exports = app => {
       path: file.path,
     })).save();
 
-    processInitailFile(file);
+    processInitial(file);
 
     return res.redirect('/files')
   })
