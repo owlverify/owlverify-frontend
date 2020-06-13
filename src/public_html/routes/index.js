@@ -10,7 +10,7 @@ module.exports = app => {
   })
 
   app.post('/signup', (req, res) => {
-    User.create(req.body, (err, user) => {
+    User.createUser(req.body, (err, user) => {
       if (err) {
         req.flash('error', err)
         return res.redirect('/signup')

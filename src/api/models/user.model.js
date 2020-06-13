@@ -93,7 +93,7 @@ userSchema.statics = {
     }
   },
 
-  async create (data, fn) {
+  async createUser (data, fn) {
     if (!data)
       return fn('No data provided')
 
