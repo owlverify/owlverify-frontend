@@ -184,7 +184,7 @@ userSchema.statics = {
     }
   },
 
-  dashboardData(user, query, fn) {
+  dashboardData(user, fn) {
     let data = {
       files: 0,
       credits: 0
