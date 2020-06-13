@@ -1,4 +1,5 @@
 const multer = require('multer')
+const fs = require('fs')
 const User = require('../../api/models/user.model')
 const File = require('../../api/models/file.model')
 const render = require('../../api/lib/utils').render
