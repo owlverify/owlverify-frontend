@@ -13,7 +13,8 @@ const fileSchema = new mongoose.Schema({
   ownerId: {
     type: mongoose.Schema.Types.ObjectID,
     ref: 'User',
-    required: true
+    required: true,
+    index: true
   },
   name: {
     type: String,
@@ -60,7 +61,7 @@ fileSchema.statics = {
     qs.sort[sort] = order
 
     let p = new Promise((resolve, reject) => {
-      this.count({
+      this.countDocuments({
         ownerId: account.id
       }, (err, c) => {
         if (err)
