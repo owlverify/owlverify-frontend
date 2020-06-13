@@ -2,6 +2,10 @@ const User = require('../../api/models/user.model')
 const render = require('../../api/lib/utils').render
 
 module.exports = app => {
+  app.get('/', (req, res) => {
+    res.render('index', render(req))
+  })
+
   //Signup
   app.get('/signup', (req, res) => {
     res.render('signup', render(req, {
