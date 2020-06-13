@@ -6,7 +6,15 @@ const render = require('../../api/lib/utils').render
 // SET STORAGE
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads')
+    const userId = req.session.account.id
+
+    const dir = `./uploads/${userId}`
+    fs.exists(dir, exist => {
+      if (!exist)
+        return fs.mkdir(dir, error => cb(error, dir))
+
+      return cb(null, dir)
+    })
   },
   filename: function (req, file, cb) {
     cb(null, file.fieldname + '-' + Date.now())
