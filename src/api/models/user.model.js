@@ -124,7 +124,7 @@ userSchema.statics = {
           email: email,
           password: new Buffer(derivedKey).toString('base64'),
           salt: salt,
-          reg_date: new Date()
+          //reg_date: new Date()
         }, (err, result) => {
           return fn(null, {
             id: result.ops[0]._id,
