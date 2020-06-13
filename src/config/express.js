@@ -7,9 +7,9 @@ const sessionStore = require('connect-mongo')(session)
 const methodOverride = require('method-override')
 const cors = require('cors')
 const helmet = require('helmet')
-const path = require('path');
-const flash = require('flash');
-const favicon = require('serve-favicon');
+const path = require('path')
+const flash = require('flash')
+const favicon = require('serve-favicon')
 
 const Liquid = require('liquidjs').Liquid
 const engine = new Liquid()
@@ -19,7 +19,6 @@ const engine = new Liquid()
 engine.registerFilter('remove', (v, arg) => {
   let arr = [],
     arg_arr = arg.split(',')
-
 
   // Remove
   for (let _arg of arg_arr) {
@@ -87,14 +86,14 @@ const sess = {
   saveUninitialized: false,
   unset: 'destroy'
 }
-app.use(session(sess));
+app.use(session(sess))
 
-app.engine('liquid', engine.express());
-app.set('view engine', 'liquid');
-app.set('views', __dirname + '/../public_html');
-app.use(express.static(__dirname + '/../public_html/static'));
-app.use(favicon(path.join(__dirname, '../public_html', 'favicon.ico')));
-app.use(flash());
+app.engine('liquid', engine.express())
+app.set('view engine', 'liquid')
+app.set('views', __dirname + '/../public_html')
+app.use(express.static(__dirname + '/../public_html/static'))
+app.use(favicon(path.join(__dirname, '../public_html', 'favicon.ico')))
+app.use(flash())
 
 // parse body params and attache them to req.body
 app.use(bodyParser.json())
@@ -112,6 +111,41 @@ app.use(helmet())
 
 // enable CORS - Cross Origin Resource Sharing
 app.use(cors())
+
+app.use((req, res, next) => {
+  // Cache control
+  res.header('Cache-Control', 'no-cache, no-store, must-revalidate')
+
+  let url = req.url.substring(1),
+    page
+  // If session doesnot exist and accessing any of the secured pages
+  let secured = [
+    'dashboard',
+    'files',
+    'users',
+    'profile',
+    'settings',
+    'billing'
+  ]
+  let login = ['signup', 'recover', 'login']
+  if (!req.session.account) {
+    for (page of secured) {
+      if (url.lastIndexOf(page, 0) === 0) {
+        req.session.ref = req.url
+        return res.redirect('/login')
+      }
+    }
+  } else {
+    // If logged in but accessing "signup pages"
+    for (page of login) {
+      if (url.lastIndexOf(page, 0) === 0) {
+        return res.redirect('/dashboard')
+      }
+    }
+  }
+
+  next()
+})
 
 require('../public_html/routes')(app)
 
