@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const crypto = require('crypto')
 
-const Recover = require('recover.model')
+const Recover = require('./recover.model')
 
 /**
  * User Roles
