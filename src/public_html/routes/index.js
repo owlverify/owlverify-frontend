@@ -1,4 +1,5 @@
 const User = require('../../api/models/user.model')
+const File = require('../../api/models/file.model')
 const render = require('../../api/lib/utils').render
 
 module.exports = app => {
@@ -96,10 +97,25 @@ module.exports = app => {
   })
 
   app.get('/files', (req, res) => {
-    res.render('files', render(req, {
-      title: 'Files',
-      page: 'files'
-    }))
+    let options = {
+      sort: 'updated_at'
+    };
+
+    if (req.query.sort)
+      options.sort = req.query.sort;
+    if (req.query.dir)
+      options.dir = req.query.dir;
+    if (req.query.offset)
+      options.offset = req.query.offset;
+
+    File.getAll(req.session.account, options, (err, data) => {
+      res.render('files', render(req, {
+        title: 'Files',
+        page: 'files',
+        query: req.query,
+        data: data
+      }))
+    })
   })
 
   // Logout
