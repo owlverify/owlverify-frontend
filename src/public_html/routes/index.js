@@ -67,6 +67,24 @@ module.exports = app => {
     })
   })
 
+  // Recover
+  app.get('/recover', (req, res) => {
+    res.render('recover', render(req, {
+      title: 'Recover password'
+    }))
+  })
+
+  app.post('/recover', (req, res) => {
+    User.recoverPassword(req.body, (err, doc) => {
+      if (err)
+        req.flash('error', err)
+      else
+        req.flash('info', 'Password reset mail has been sent')
+
+      return res.redirect('/recover')
+    })
+  })
+
   app.get('/files', (req, res) => {
     res.render('files', render(req, {
       title: 'Files',

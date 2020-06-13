@@ -130,6 +130,10 @@ userSchema.statics = {
       console.log(e)
       return fn('There has been an internal error. Please try again later.')
     }
+  },
+
+  async recoverPassword(data, fn) {
+
   }
 }
 

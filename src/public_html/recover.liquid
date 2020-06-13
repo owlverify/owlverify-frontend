@@ -1,0 +1,25 @@
+{% include 'partials/header.liquid' %}
+
+<section style="margin-top:10%">
+  <div class="container">
+    <div class="row">
+      <div class="four columns offset-by-four">
+        <h5 class="center pad-btm"><a href="/"><i class="icon-bar-graph-2"></i></a></h5>
+        <div class="box">
+          <form method="post">
+            <p><strong>Recover Password</strong></p>
+            {% if error %}<p class="error">{{ error }}</p>{% endif %}
+            {% if info %}<p class="info">{{ info }}</p>{% endif %}
+            <p>Enter your email below to recover your password</p>
+            <p><input type="email" name="email" class="u-full-width" placeholder="Email" required></p>
+            <p><button class="button button-primary u-full-width">Recover</button></p>
+          </form>
+        </div>
+        <p class="center"><a href="/login">Back</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
