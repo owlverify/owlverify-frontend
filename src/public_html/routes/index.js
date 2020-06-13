@@ -10,17 +10,13 @@ module.exports = app => {
   })
 
   app.post('/signup', (req, res) => {
-    console.log(req.session)
-
     User.createUser(req.body, (err, user) => {
-      console.log(err, user)
-      console.log(req.session)
       if (err) {
         req.flash('error', err)
         return res.redirect('/signup')
       }
 
-      res.session.account = user
+      req.session.account = user
       return res.redirect('/dashboard')
     })
   })
