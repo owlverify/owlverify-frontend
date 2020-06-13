@@ -2,40 +2,13 @@
 
 <section>
   <div class="container">
-    <!--
-      Country
-      Device OS
-      Clients
-      Platform (mobile/desktop~)
-      Top clicks
-      Top opens
-      Time graph of engagement
-    -->
     <div class="row pad-btm">
       <div class="six columns">
-        <a href="/users">Users</a> <i class="icon-fast-forward"></i>
+        <a href="/files">Files</a> <i class="icon-fast-forward"></i>
         <h5>{{ data.email }}</h5>
         <small><a href="#" class="small-button mail">Quick Mail</a></small>
         {% if error %}<p class="error">{{ error }}</p>{% endif %}
         {% if info %}<p class="info">{{ info }}</p>{% endif %}
-      </div>
-      {% assign or = data.unique_opens | times: 100 | divided_by: data.deliveries | round: 2 %}
-      {% assign ctr = data.urls | size | times: 100 | divided_by: data.deliveries | round: 2 %}
-      <div class="six columns">
-        <div class="row grid">
-          <div class="three columns">
-            deliveries <h5 class="inline">{{ data.deliveries }}</h5><br>
-            <span>&nbsp;</span>
-          </div>
-          <div class="five columns">
-            opens <h5 class="inline">{{ data.opens }}</h5><br>
-            <span class="fade">{{ data.unique_opens }} unique, {{ or }}% open rate</span>
-          </div>
-          <div class="four columns">
-            clicks <h5 class="inline">{{ data.clicks }}</h5><br>
-            <span class="fade">{{ data.urls | size }} unique, {{ ctr }}% CTR</span>
-          </div>
-        </div>
       </div>
     </div>
     <div class="row">
