@@ -44,9 +44,9 @@ fileSchema.statics = {
     options = options || {}
     let limit = options.limit || 20
     let skip = options.offset || 0
-    let sort = 'updated_at',
+    let sort = 'updatedAt',
       order = -1,
-      allowedSort = ['name', 'updated_at', 'status']
+      allowedSort = ['name', 'updatedAt', 'status']
 
     if (options.sort && allowedSort.indexOf(options.sort) !== -1)
       sort = options.sort
