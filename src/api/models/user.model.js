@@ -120,7 +120,7 @@ userSchema.statics = {
         if (err)
           return fn('There has been an internal error. Please try again later.')
 
-        u.insert({
+        u.create({
           email: email,
           password: new Buffer(derivedKey).toString('base64'),
           salt: salt,
