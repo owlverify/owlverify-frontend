@@ -68,7 +68,7 @@ userSchema.statics = {
         if (err)
           return fn('There has been an internal error. Please try again later.')
 
-        let hash = new Buffer(derivedKey).toString('base64')
+        let hash = Buffer.from(derivedKey).toString('base64')
         if (hash !== user.password)
           return fn('Wrong password. Confirm and try again.')
 
@@ -117,7 +117,7 @@ userSchema.statics = {
 
       let result = await (new User({
         email: email,
-        password: new Buffer(derivedKey).toString('base64'),
+        password: Buffer.from(derivedKey).toString('base64'),
         salt: salt,
         //reg_date: new Date()
       })).save()
