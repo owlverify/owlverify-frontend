@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 /**
  * File Status
  */
-const status = ['pending', 'uploaded', 'verified', 'processing']
+const status = ['uploaded', 'verified', 'processing']
 
 /**
  * File Schema
@@ -30,7 +30,7 @@ const fileSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: status,
-    default: 'pending',
+    default: 'processing',
   },
 }, {
   timestamps: true

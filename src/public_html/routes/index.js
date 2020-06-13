@@ -139,7 +139,7 @@ module.exports = app => {
     })
   })
 
-  app.post('/file/upload', upload.single('csvFile'), async (req, res, next) => {
+  app.post('/files/upload', upload.single('csvFile'), async (req, res, next) => {
     const file = req.file;
 
     await (new File({
