@@ -37,7 +37,7 @@ const fileSchema = new mongoose.Schema({
 })
 
 fileSchema.statics = {
-  getAll (account, options, fn) {
+  async getAll (account, options, fn) {
     if (!account)
       return fn('Account not specified')
 
@@ -70,9 +70,11 @@ fileSchema.statics = {
         resolve(c)
       })
     }).then(total => {
+      console.log(total)
+
       this.find({
         ownerId: account.id
-      }, qs).toArray((err, docs) => {
+      }, qs, (err, docs) => {
         if (err) {
           console.log(err)
           return fn('Internal Error')
