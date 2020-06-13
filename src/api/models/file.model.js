@@ -72,7 +72,7 @@ fileSchema.statics = {
     }).then(total => {
       this.find({
         ownerId: account.id
-      }).toArray((err, docs) => {
+      }, qs).toArray((err, docs) => {
         if (err) {
           console.log(err)
           return fn('Internal Error')
