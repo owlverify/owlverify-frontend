@@ -28,6 +28,7 @@
       <div class="nine columns">
         {% if acc_email %}
         <ul class="left">
+          <li><a href="/dashboard"{% if page == 'dashboard' %} class="active"{% endif %}>Dashboard</a></li>
           <li><a href="/files"{% if page == 'files' %} class="active"{% endif %}>Files</a></li>
         </ul>
         {% else %}&nbsp;{% endif %}
@@ -36,9 +37,9 @@
         {% if acc_email %}
         <ul>
           <li class="has-sub">
-            <a href=""><strong>{{ acc_active_domain.domain }}</strong> <i class="icon-head"></i></a>
+            <a href=""><strong>{{ acc_email }}</strong> <i class="icon-head"></i></a>
             <ul class="subnav">
-              <li><a href="/settings">Domain Settings</a></li>
+              <li><a href="/settings">Account Settings</a></li>
               <li><a href="/profile">Profile Settings</a></li>
               <li><a href="/logout">Logout</a></li>
             </ul>
@@ -46,7 +47,6 @@
         </ul>
         {% endif %}
       </div>
-
     </div>
   </div>
 </header>
