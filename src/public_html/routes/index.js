@@ -129,14 +129,6 @@ module.exports = app => {
     if (req.query.offset)
       options.offset = req.query.offset;
 
-    /*
-    await (new File({
-      ownerId: req.session.account.id,
-      name: "123",
-      path: "/123",
-    })).save();
-     */
-
     File.getAll(req.session.account, options, (err, data) => {
       res.render('files', render(req, {
         title: 'Files',
@@ -150,9 +142,13 @@ module.exports = app => {
   app.post('/file/upload', upload.single('myFile'), (req, res, next) => {
     const file = req.file;
 
-    console.log(file)
+    await (new File({
+      ownerId: req.session.account.id,
+      name: file.originalname,
+      path: file.path,
+    })).save();
 
-    res.status(200).send('ok')
+    return res.redirect('/files')
   })
 
   // Logout
