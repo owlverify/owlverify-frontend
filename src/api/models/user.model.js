@@ -186,7 +186,8 @@ userSchema.statics = {
 
   dashboardData(user, fn) {
     let data = {
-      files: 0,
+      totalFiles: 0,
+      files: [],
       credits: 0
     }
 

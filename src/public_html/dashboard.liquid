@@ -2,89 +2,31 @@
 
 <section>
   <div class="container">
-    <!--
-      Country
-      Device OS
-      Clients
-      Platform (mobile/desktop~)
-      Top clicks
-      Top opens
-      Time graph of engagement
-    -->
     {% if info %}<p class="info center">{{ info }}</p>{% endif %}
     <div class="row">
       <div class="six columns">
-        <div class="row center">
-          <div class="four columns">
-            <div class="box">
-              <p><strong>Delivered</strong></p>
-              <h5><a href="feed?action[]=delivered">{{ data.delivered | format }}</a></h5>
-              <strong><a href="feed?action[]=failed">{{ data.failed | format }}</a></strong><br>failed
-            </div>
-          </div>
-        </div>
         <!--div class="box">Country</div-->
         <div class="row center">
           <div class="four columns">
             <div class="box">
-              <p><strong>Mails</strong></p>
-              <h4><a href="mails">{{ data.mails | format }}</a></h4>
+              <p><strong>Files</strong></p>
+              <h4><a href="files">{{ data.totalFiles | format }}</a></h4>
             </div>
           </div>
           <div class="four columns">
             <div class="box">
-              <p><strong>Users</strong></p>
-              <h4><a href="users">{{ data.users | format }}</a></h4>
+              <p><strong>Credits</strong></p>
+              <h4><a href="credits">{{ data.credits | format }}</a></h4>
             </div>
           </div>
-          <div class="four columns">
-            <div class="box">
-              <p><strong>Feed</strong></p>
-              <h4><a href="feed">{{ data.feed | format }}</a></h4>
-            </div>
-          </div>
-        </div>
-        <div class="box">
-          <select name="top_clicks.days" class="right">
-            <option value="today"{% if query['top_clicks.days'] == 'today' %} selected{%endif%}>Today</option>
-            <option value="yesterday"{% if query['top_clicks.days'] == 'yesterday' %} selected{%endif%}>Yesterday</option>
-            <option value="7"{% if query['top_clicks.days'] == nil or query['top_clicks.days'] == '7' %} selected{%endif%}>Last 7 days</option>
-            <option value="30"{% if query['top_clicks.days'] == '30' %} selected{%endif%}>Last 30 days</option>
-          </select>
-          <p><strong>Top Clicks</strong></p>
-          <ul class="list break-words u-cf">
-            {% for url in data.clicks %}
-              <li><a href="/links/{{ url._id | url_encode }}">{{ url._id }}</a> <a href="{{ url._id }}" target="_blank" rel="noopener noreferrer"><i class="icon-open fade"></i></a> <span class="fade">({{ url.count }})</span></li>
-            {% endfor %}
-          </ul>
         </div>
       </div>
       <div class="six columns">
-        <div class="row">
-          <div class="six columns">
-            <div class="box">
-              <p><strong>Platform</strong></p>
-              <canvas id="chart-platform"></canvas>
-            </div>
-          </div>
-          <div class="six columns">
-            <div class="box">
-              <p><strong>OS</strong></p>
-              <canvas id="chart-os"></canvas>
-            </div>
-          </div>
-        </div>
         <div class="box">
-          <select name="top_opens.days" class="right">
-            <option value="today"{% if query['top_opens.days'] == 'today' %} selected{%endif%}>Today</option>
-            <option value="yesterday"{% if query['top_opens.days'] == 'yesterday' %} selected{%endif%}>Yesterday</option>
-            <option value="7"{% if query['top_opens.days'] == nil or query['top_opens.days'] == '7' %} selected{%endif%}>Last 7 days</option>
-            <option value="30"{% if query['top_opens.days'] == '30' %} selected{%endif%}>Last 30 days</option>
-          </select>
-          <p><strong>Top Opens</strong></p>
+          <p><strong>Files</strong></p>
           <ul class="list break-words u-cf">
-            {% for open in data.opens %}
-              <li><a href="/mails/{{ open._id }}">{{ open.mail.subject }}</a> <span class="fade">({{ open.count }})</span></li>
+            {% for file in data.files %}
+              <li><a href="/files/{{ file._id }}">{{ file.name }}</a></li>
             {% endfor %}
           </ul>
         </div>
