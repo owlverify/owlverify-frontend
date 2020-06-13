@@ -2,60 +2,61 @@
 
 <section>
   <div class="container">
-    <div class="row pad-btm">
-      <div class="six columns">
-        <a href="/files">Files</a> <i class="icon-fast-forward"></i>
-        <h5>{{ data.totalFiles | format }}</h5>
-        {% if error %}<p class="error">{{ error }}</p>{% endif %}
-        {% if info %}<p class="info">{{ info }}</p>{% endif %}
-      </div>
-    </div>
-    <div class="row">
-      <div class="eight columns">
-        <div class="feed">
-          {% assign last_msg_id = "" %}
-          {% for log in data.logs %}
-            {% if log.msg_id != last_msg_id %}
-            {% if last_msg_id != "" %}</ul></div></div>{% endif %}
-            <div class="row">
-              <div class="twelve columns">
-                <a href="/mails/{{ log.msg_id }}">{{ log.subject }}</a>
-                <ul class="timeline">
-                {% endif %}
-
-                <li>
-                  <div class="line"></div>
-                  <date>{{ log.timeago }}</date>
-                  {% if log.event == 'clicked' %}
-                    <span class="tag green">{{ log.event }}</span> <a href="/links/{{ log.url | url_encode }}" class="break-words">{{ log.url }}</a> <a href="{{ log.url }}" target="_blank" rel="noopener noreferrer"><i class="icon-open fade"></i></a>
-                  {% elsif log.event == 'opened' %}
-                    <span class="tag yellow">{{ log.event }}</span> <span class="fade">{{ log.client }} on {{ log.os }} ({{ log.platform }}){%if log.city != 'Unknown' %}, {{ log.city }}{% endif %}{%if log.country != 'Unknown' %}, {{ log.country }}{% endif %}</span>
-                  {% elsif log.event == 'dropped' %}
-                    <span class="tag red">{{ log.event }}</span> <span class="fade">{{ log.description }}</span>
-                  {% elsif log.event == 'bounced' %}
-                    <span class="tag pink">{{ log.event }}</span><span class="fade">{{ log.error }}</span>
-                  {% else %}
-                    <span class="tag">{{ log.event }}</span><!--a href="/mails/{{ log.msg_id }}">{{ log.subject }}</a-->
-                  {% endif %}
-                </li>
-
-              {% assign last_msg_id = log.msg_id %}
-            {% endfor %}
-            {% if last_msg_id != "" %}</ul></div></div>{% endif %}
-          </div>
+    <div class="bar">
+      <div class="row">
+        <div class="twelve columns">
+          <h6><span style="padding-right:15px">All Files</span></h6>
         </div>
-      <div class="four columns">
-        <p><strong>Clicks</strong></p>
-        <ul class="list break-words">
-          {% for url in data.urls %}
-            <li><a href="/links/{{ url | url_encode }}">{{ url }}</a> <a href="{{ url }}" target="_blank" rel="noopener noreferrer"><i class="icon-open fade"></i></a></li>
-          {% endfor %}
-        </ul>
       </div>
     </div>
+    <div class="feed">
+      <table class="u-full-width">
+        <thead>
+        <tr>
+          <th><a href="?sort=last_seen&dir={% if query.dir == 'desc' %}asc{% else %}desc{% endif %}">Last<br>Interaction{% if query.sort == 'last_seen' %} <i class="icon-arrow-{% if query.dir == 'asc' %}up{% else %}down{% endif %}"></i>{% endif %}</a></th>
+          <th><a href="?sort=email&dir={% if query.dir == 'desc' %}asc{% else %}desc{% endif %}">Email{% if query.sort == 'email' %} <i class="icon-arrow-{% if query.dir == 'asc' %}up{% else %}down{% endif %}"></i>{% endif %}</a></th>
+          <th class="center"><a href="?sort=delivered&dir={% if query.dir == 'desc' %}asc{% else %}desc{% endif %}">Delivered{% if query.sort == 'delivered' %} <i class="icon-arrow-{% if query.dir == 'asc' %}up{% else %}down{% endif %}"></i>{% endif %}</a></th>
+          <th class="center">Bounced</th>
+          <th class="center"><a href="?sort=opened&dir={% if query.dir == 'desc' %}asc{% else %}desc{% endif %}">Opened{% if query.sort == 'opened' %} <i class="icon-arrow-{% if query.dir == 'asc' %}up{% else %}down{% endif %}"></i>{% endif %}</a></th>
+          <th class="center">Unique<br>opens</th>
+          <th class="center"><a href="?sort=clicked&dir={% if query.dir == 'desc' %}asc{% else %}desc{% endif %}">Clicked{% if query.sort == 'clicked' %} <i class="icon-arrow-{% if query.dir == 'asc' %}up{% else %}down{% endif %}"></i>{% endif %}</a></th>
+          <th class="center">Unique<br>clicks</th>
+        </tr>
+      </thead>
+      {% for file in data.files %}
+        <tr>
+          <td>{{ file.timeago }}</td>
+          <td><a href="/files/{{ file.email }}">{{ file.email }}</a></td>
+          <td class="center">
+            <a href="/files/{{ file.email }}">{{ file.delivered | default: '0' }}</a>
+          </td>
+          <td class="center">
+            {% if file.bounced %}<span class="fade">{{ file.bounced }}</span>{% endif %}</a>
+          </td>
+          <td class="center">
+            <a href="/files/{{ file.email }}">{{ file.opened | default: '0' }}</a>
+          </td>
+          <td class="center">
+              {% if file.unique_opens %}<span class="fade">{{ file.unique_opens }}</span>{% endif %}</a></a>
+          </td>
+          <td class="center">
+            <a href="/files/{{ file.email }}">{{ file.clicked | default: '0' }}</a>
+          </td>
+          <td class="center">
+            {% if file.unique_clicks %}<span class="fade">{{ file.unique_clicks }}</span>{% endif %}</a></a>
+          </td>
+        </tr>
+      {% endfor %}
+      </table>
+    </div>
+    {% if data.files %}
+    {% assign next = data.offset | plus: data.count %}
+    {% assign prev = data.offset | minus: data.limit %}
+    {% assign q = query | remove: 'offset' %}
+    <p class="right top-20">{{ data.offset | plus: 1 | format }} to {{ next | format }} of {{ data.total | format }}</p>
+    <p class="pagination">{% if data.offset > 0 %}<a href="?{{ q }}{% if prev > 0 %}&offset={{ prev }}{% endif %}" class="button button-primary">Prev</a>{% endif %}{% if next < data.total %}<a href="?{{ q }}&offset={{ data.offset | plus: data.count }}" class="button button-primary">Next</a>{% endif %}</p>
+    {% endif %}
   </div>
 </section>
-
-<script type="text/javascript" src="/js/jquery.js"></script>
 
 {% include 'partials/footer.liquid' %}
