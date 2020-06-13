@@ -127,8 +127,8 @@ userSchema.statics = {
       console.log(result)
 
       return fn(null, {
-        id: result.ops[0]._id,
-        email: result.ops[0].email,
+        id: result._id,
+        email: result.email,
       })
     } catch (e) {
       console.log(e)
