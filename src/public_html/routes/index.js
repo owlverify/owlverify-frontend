@@ -109,6 +109,7 @@ module.exports = app => {
       options.offset = req.query.offset;
 
     File.getAll(req.session.account, options, (err, data) => {
+      console.log(err, data);
       res.render('files', render(req, {
         title: 'Files',
         page: 'files',
