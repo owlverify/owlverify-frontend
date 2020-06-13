@@ -9,7 +9,7 @@ var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const userId = req.session.account.id
 
-    const dir = `./uploads/${userId}`
+    const dir = `/tmp/${userId}`
     fs.exists(dir, exist => {
       if (!exist)
         return fs.mkdir(dir, error => cb(error, dir))
