@@ -53,4 +53,10 @@ module.exports = app => {
       page: 'files'
     }))
   })
+
+  // Logout
+  app.get('/logout', (req, res) => {
+    req.session.destroy()
+    res.redirect('/')
+  })
 }
