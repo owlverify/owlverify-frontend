@@ -23,13 +23,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 6,
-    maxlength: 128,
+    maxlength: 256,
   },
   salt: {
     type: String,
     required: true,
     minlength: 6,
-    maxlength: 128,
+    maxlength: 256,
   },
   role: {
     type: String,
@@ -109,17 +109,18 @@ userSchema.statics = {
     try {
       let user = await this.findOne({ email }).exec()
 
-      console.log(user)
       if (user)
         return fn('This email is already in use.')
 
       let u = this
 
       let salt = crypto.randomBytes(128).toString('base64')
+      console.log(salt)
       crypto.pbkdf2(password, salt, 5000, 32, 'sha512', (err, derivedKey) => {
         if (err)
           return fn('There has been an internal error. Please try again later.')
 
+        console.log(salt)
         u.create({
           email: email,
           password: new Buffer(derivedKey).toString('base64'),
