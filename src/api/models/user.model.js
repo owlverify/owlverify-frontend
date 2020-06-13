@@ -23,13 +23,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 6,
-    maxlength: 256,
+    maxlength: 512,
   },
   salt: {
     type: String,
     required: true,
     minlength: 6,
-    maxlength: 256,
+    maxlength: 512,
   },
   role: {
     type: String,
