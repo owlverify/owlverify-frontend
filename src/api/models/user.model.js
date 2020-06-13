@@ -117,12 +117,12 @@ userSchema.statics = {
       let derivedKey = crypto.pbkdf2Sync(password, salt, 5000, 32, 'sha512')
 
       console.log('derivedKey', derivedKey)
-      let result = await this.create({
+      let result = await (new User({
         email: email,
         password: new Buffer(derivedKey).toString('base64'),
         salt: salt,
         //reg_date: new Date()
-      }).exec()
+      })).save()
 
       console.log(result)
 
@@ -137,7 +137,9 @@ userSchema.statics = {
   }
 }
 
+const User = mongoose.model('Users', userSchema);
+
 /**
  * @typedef User
  */
-module.exports = mongoose.model('Users', userSchema)
+module.exports = User
