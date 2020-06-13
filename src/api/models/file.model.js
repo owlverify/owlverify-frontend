@@ -75,22 +75,20 @@ fileSchema.statics = {
       this.find({
         ownerId: account.id
       }, null, qs)
-        //.sort(qs.sort)
-        //.limit(qs.limit)
         .exec((err, docs) => {
-        if (err) {
-          console.log(err)
-          return fn('Internal Error')
-        }
+          if (err) {
+            console.log(err)
+            return fn('Internal Error')
+          }
 
-        fn(null, {
-          total: total,
-          count: docs.length,
-          offset: skip,
-          limit,
-          files: docs
+          fn(null, {
+            total: total,
+            count: docs.length,
+            offset: skip,
+            limit,
+            files: docs
+          })
         })
-      })
     }).catch(err => {
       fn(err)
     })

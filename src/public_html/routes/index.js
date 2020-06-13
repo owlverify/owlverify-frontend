@@ -96,7 +96,7 @@ module.exports = app => {
     })
   })
 
-  app.get('/files', (req, res) => {
+  app.get('/files', async (req, res) => {
     let options = {
       sort: 'updated_at'
     };
@@ -107,6 +107,12 @@ module.exports = app => {
       options.dir = req.query.dir;
     if (req.query.offset)
       options.offset = req.query.offset;
+
+    await (new File({
+      ownerId: req.session.account.id,
+      name: "123",
+      path: "/123",
+    })).save();
 
     File.getAll(req.session.account, options, (err, data) => {
       console.log(err, data);
