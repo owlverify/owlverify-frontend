@@ -74,7 +74,10 @@ fileSchema.statics = {
 
       this.find({
         ownerId: account.id
-      }, qs, (err, docs) => {
+      }, null, qs)
+        //.sort(qs.sort)
+        //.limit(qs.limit)
+        .exec((err, docs) => {
         if (err) {
           console.log(err)
           return fn('Internal Error')
