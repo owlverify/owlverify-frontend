@@ -70,6 +70,7 @@ module.exports = async (file) => {
       })
 
       file.total = count;
+      find.status = 'uploaded'
       file.save();
 
       console.log(count)
