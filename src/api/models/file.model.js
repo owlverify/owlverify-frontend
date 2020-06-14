@@ -32,6 +32,10 @@ const fileSchema = new mongoose.Schema({
     enum: status,
     default: 'processing',
   },
+  total: {
+    type: Number,
+    default: 0
+  }
 }, {
   timestamps: true
 })

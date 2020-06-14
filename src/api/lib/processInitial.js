@@ -69,7 +69,9 @@ module.exports = async (file) => {
         }
       })
 
-      console.log(file)
+      file.total = count;
+      file.save();
+
       console.log(count)
     });
 }
