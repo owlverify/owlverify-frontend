@@ -51,12 +51,23 @@ const worker = async.asyncify(function (work) {
   })
 })
 
-
+async function asyncForEach (array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array)
+  }
+}
 
 module.exports = async (file) => {
   csv()
     .fromFile(file.path)
     .then(async (jsonArr) => {
-      console.log(jsonArr)
+      let count = 0
+      await asyncForEach(jsonArr, async (data) => {
+        if (data.Email || data.email) {
+          count ++;
+        }
+      })
+
+      console.log(count)
     });
 }
