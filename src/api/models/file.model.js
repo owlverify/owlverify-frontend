@@ -70,8 +70,6 @@ fileSchema.statics = {
         resolve(c)
       })
     }).then(total => {
-      console.log(total)
-
       this.find({
         ownerId: account.id
       }, null, qs)

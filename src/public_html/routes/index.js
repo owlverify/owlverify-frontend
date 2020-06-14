@@ -141,13 +141,14 @@ module.exports = app => {
   })
 
   app.post('/files/upload', upload.single('csvFile'), async (req, res, next) => {
-    const file = req.file;
+    let file = req.file;
 
-    await (new File({
+    file = new File({
       ownerId: req.session.account.id,
       name: file.originalname,
       path: file.path,
-    })).save();
+    });
+    await file.save();
 
     processInitial(file);
 

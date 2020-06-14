@@ -1,5 +1,6 @@
 const async = require('async')
 const csv = require('csvtojson')
+const File = require('../models/file.model')
 
 function queue (worker, work, concurrency) {
   console.log('started, with concurrency=' + concurrency)
@@ -68,6 +69,7 @@ module.exports = async (file) => {
         }
       })
 
+      console.log(file)
       console.log(count)
     });
 }
