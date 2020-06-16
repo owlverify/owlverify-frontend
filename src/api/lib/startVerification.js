@@ -58,23 +58,23 @@ const worker = async.asyncify(function (work) {
 })
 
 module.exports = async (file) => {
-  let filePath = file.ownerId.toString() + '-' + file._id.toString()
+  let fileName = file.ownerId.toString() + '-' + file._id.toString()
 
-  filesData[filePath] = []
+  filesData[fileName] = []
   console.log(filesData)
 
   csv()
     .fromFile(file.path)
     .then(async (jsonArr) => {
       queue(worker, jsonArr, 50, {
-        filePath
+        fileName
       }).then(value => {
         console.log('complete!!!', value)
 
         var json2csvParser = new Parser({
-          fields: Object.keys(dataArr[0])
+          fields: Object.keys(filesData[fileName][0])
         })
-        const csv = json2csvParser.parse(dataArr)
+        const csv = json2csvParser.parse(filesData[fileName])
         fs.writeFileSync('/tmp/output-' + file.name, csv)
       })
     })
