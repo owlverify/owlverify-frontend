@@ -1,5 +1,7 @@
 const async = require('async')
 const csv = require('csvtojson')
+var fs = require('fs')
+var { Parser } = require('json2csv')
 
 function queue (worker, work, concurrency) {
   console.log('started, with concurrency=' + concurrency)
