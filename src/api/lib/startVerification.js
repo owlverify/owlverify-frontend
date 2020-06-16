@@ -53,9 +53,11 @@ const worker = async.asyncify(function (work) {
             Email: work.Email || work.email
           }).promise()
 
-          work.status = res.Status || res.status || 'unknown'
+          console.log(res)
+
+          work.status = (res.Status || res.status || 'unknown').toUpperCase()
         } else {
-          work.status = 'no_email_found'
+          work.status = 'NO_EMAIL_FOUND'
         }
       } catch (e) {
         console.log('error', e)
