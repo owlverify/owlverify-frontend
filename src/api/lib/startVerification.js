@@ -52,6 +52,12 @@ const worker = async.asyncify(function (work) {
     });
        */
 
+      let data = work
+      delete data.options
+      filesData[work.options.fileName].push(Object.assign(data, {
+        status: 'unknown'
+      }))
+
       resolve()
     })()
   })
