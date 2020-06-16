@@ -88,7 +88,7 @@ module.exports = async (file) => {
 
         const csv = json2csvParser.parse(filesData[fileName])
 
-        let outputPath = `/tmp/${file.ownerId}/${file.name}` + '-' + Date.now() + '.csv';
+        let outputPath = `/tmp/${file.ownerId}/output-${file.name}`;
         fs.writeFileSync(outputPath, csv)
 
         file.status = 'verified'
