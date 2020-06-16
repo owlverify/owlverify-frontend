@@ -2,6 +2,23 @@ const async = require('async')
 const csv = require('csvtojson')
 var fs = require('fs')
 var { Parser } = require('json2csv')
+var OWLHUB = require("owlhub-sdk")
+
+var OwlVerify = new OWLHUB.OwlVerify({apiVersion: '2020-05-10'});
+
+(async () => {
+  try {
+    var res = await OwlVerify.validateEmail({
+      Email: 'hello@example.com'
+    }).promise();
+
+    console.log(res)
+  }catch (e) {
+    console.log('error')
+    console.log(e)
+  }
+})();
+
 
 const filesData = {}
 
