@@ -166,6 +166,9 @@ module.exports = app => {
 
     let file = await File.findOne({ _id: fileId.toObjectId(), ownerId: req.session.account.id }).exec()
 
+    file.status = 'processing'
+    await file.save()
+
     startVerification(file)
 
     return res.redirect('/files')

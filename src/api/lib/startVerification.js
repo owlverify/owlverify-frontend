@@ -79,7 +79,7 @@ module.exports = async (file) => {
     .then(async (jsonArr) => {
       queue(worker, jsonArr, 50, {
         fileName
-      }).then((value) => {
+      }).then(async (value) => {
         console.log('complete!!!', value)
 
         var json2csvParser = new Parser({
@@ -88,6 +88,9 @@ module.exports = async (file) => {
 
         const csv = json2csvParser.parse(filesData[fileName])
         fs.writeFileSync('/tmp/output-' + file.name, csv)
+
+        file.status = 'verified'
+        await file.save()
       })
     })
 }
