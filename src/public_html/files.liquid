@@ -33,13 +33,13 @@
           <td>{{ file.total }}</td>
           <td class="center">{{ file.updatedAt }}</td>
           <td class="center">
-            {% if file.status === 'uploaded' %}
+            {% if file.status == 'uploaded' %}
               <a href="/files/{{ file.id }}/start">
                 Start Verification
               </a>
             {% endif %}
 
-            {% if file.status !== 'uploaded' %}
+            {% if file.status != 'uploaded' %}
             {{ file.status }}
             {% endif %}
           </td>
