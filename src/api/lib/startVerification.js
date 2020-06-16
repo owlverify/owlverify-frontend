@@ -45,18 +45,13 @@ function queue (worker, work, concurrency, options) {
 const worker = async.asyncify(function (work) {
   return new Promise((resolve, reject) => {
     (async () => {
-      console.log(work)
-
       try {
         if (work.Email || work.email) {
           var validationResult = await OwlVerify.validateEmail({
             Email: work.Email || work.email
           }).promise()
 
-          console.log(validationResult)
-
           work.status = (validationResult.Status || 'unknown').toUpperCase()
-          console.log(work)
         } else {
           work.status = 'NO_EMAIL_FOUND'
         }
@@ -64,12 +59,9 @@ const worker = async.asyncify(function (work) {
         console.log('error', e)
         work.status = 'Internal Error. contact at support@owlhub.io'
       } finally {
-        console.log(work)
         let data = JSON.parse(JSON.stringify(work))
         delete data.options
-        filesData[work.options.fileName].push(Object.assign(data, {
-          status: 'unknown'
-        }))
+        filesData[work.options.fileName].push(data)
       }
 
       resolve()
@@ -81,19 +73,19 @@ module.exports = async (file) => {
   let fileName = file.ownerId.toString() + '-' + file._id.toString()
 
   filesData[fileName] = []
-  console.log(filesData)
 
   csv()
     .fromFile(file.path)
     .then(async (jsonArr) => {
       queue(worker, jsonArr, 50, {
         fileName
-      }).then(value => {
+      }).then((value) => {
         console.log('complete!!!', value)
 
         var json2csvParser = new Parser({
           fields: Object.keys(filesData[fileName][0])
         })
+
         const csv = json2csvParser.parse(filesData[fileName])
         fs.writeFileSync('/tmp/output-' + file.name, csv)
       })
