@@ -56,6 +56,7 @@ const worker = async.asyncify(function (work) {
           console.log(validationResult)
 
           work.status = (validationResult.Status || 'unknown').toUpperCase()
+          console.log(work)
         } else {
           work.status = 'NO_EMAIL_FOUND'
         }
