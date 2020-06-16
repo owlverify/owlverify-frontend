@@ -3,9 +3,7 @@ const csv = require('csvtojson')
 var fs = require('fs')
 var { Parser } = require('json2csv')
 
-const filesData = {
-
-}
+const filesData = {}
 
 var dataArr = []
 
@@ -36,7 +34,7 @@ function queue (worker, work, concurrency, options) {
           reject(firstError)
         })
       })
-      q.push(work.map(w => w.options = options))
+      q.push(work.map(w => Object.assign(w, { options })))
     }
   })
 }
@@ -60,10 +58,10 @@ const worker = async.asyncify(function (work) {
 })
 
 module.exports = async (file) => {
-  let filePath = file.ownerId.toString() + '-' + file._id.toString();
+  let filePath = file.ownerId.toString() + '-' + file._id.toString()
 
   filesData[filePath] = []
-  console.log(filesData);
+  console.log(filesData)
 
   csv()
     .fromFile(file.path)
@@ -79,5 +77,5 @@ module.exports = async (file) => {
         const csv = json2csvParser.parse(dataArr)
         fs.writeFileSync('/tmp/output-' + file.name, csv)
       })
-    });
+    })
 }
