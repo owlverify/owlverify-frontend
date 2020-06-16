@@ -5,7 +5,11 @@ const File = require('../../api/models/file.model')
 const render = require('../../api/lib/utils').render
 const processInitial = require('../../api/lib/processInitial')
 const startVerification = require('../../api/lib/startVerification')
-var ObjectId = require('mongoose').Types.ObjectId;
+
+String.prototype.toObjectId = function() {
+  var ObjectId = (require('mongoose').Types.ObjectId);
+  return new ObjectId(this.toString());
+};
 
 // SET STORAGE
 var storage = multer.diskStorage({
@@ -160,7 +164,7 @@ module.exports = app => {
   app.get('/files/:fileId/start', async (req, res, next) => {
     const { fileId } = req.params
 
-    let file = await File.findOne({ id: new ObjectId(fileId), ownerId: req.session.account.id }).exec()
+    let file = await File.findOne({ _id: fileId.toObjectId(), ownerId: req.session.account.id }).exec()
 
     //startVerification(file);
     console.log(file)
