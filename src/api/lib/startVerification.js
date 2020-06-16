@@ -7,7 +7,7 @@ const filesData = {
 
 }
 
-function queue (worker, work, concurrency) {
+function queue (worker, work, concurrency, options) {
   console.log('started, with concurrency=' + concurrency)
   return new Promise(function (resolve, reject) {
     if (work.length === 0) {
@@ -34,7 +34,10 @@ function queue (worker, work, concurrency) {
           reject(firstError)
         })
       })
-      q.push(work)
+      q.push({
+        options,
+        work
+      })
     }
   })
 }
@@ -58,13 +61,17 @@ const worker = async.asyncify(function (work) {
 })
 
 module.exports = async (file) => {
-  filesData[file.ownerId.toString() + '-' + file._id.toString()] = []
+  let filePath = file.ownerId.toString() + '-' + file._id.toString();
+
+  filesData[filePath] = []
   console.log(filesData);
 
   csv()
     .fromFile(file.path)
     .then(async (jsonArr) => {
-      queue(worker, jsonArr, 50).then(value => {
+      queue(worker, jsonArr, 50, {
+        filePath
+      }).then(value => {
         console.log('complete!!!', value)
 
         var json2csvParser = new Parser({
