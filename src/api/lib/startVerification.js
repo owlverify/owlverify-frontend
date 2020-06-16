@@ -49,13 +49,13 @@ const worker = async.asyncify(function (work) {
 
       try {
         if (work.Email || work.email) {
-          var res = await OwlVerify.validateEmail({
+          var validationResult = await OwlVerify.validateEmail({
             Email: work.Email || work.email
           }).promise()
 
-          console.log(res)
+          console.log(validationResult)
 
-          work.status = (res.Status || res.status || 'unknown').toUpperCase()
+          work.status = (validationResult.Status || 'unknown').toUpperCase()
         } else {
           work.status = 'NO_EMAIL_FOUND'
         }
