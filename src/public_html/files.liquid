@@ -37,9 +37,15 @@
               <a href="/files/{{ file.id }}/start">
                 Start Verification
               </a>
-            {% endif %}
-            {% if file.status != 'uploaded' %}
-                {{ file.status }}
+            {% else if file.status != 'verified' %}
+              <a href="/files/{{ file.id }}/download">
+                Download
+              </a>
+              <a href="/files/{{ file.id }}/start">
+                Re-verify
+              </a>
+            {% else %}
+              {{ file.status }}
             {% endif %}
           </td>
         </tr>
