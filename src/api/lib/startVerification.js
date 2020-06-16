@@ -68,8 +68,6 @@ module.exports = async (file) => {
         }
       })
 
-      file.total = count;
-      file.status = 'uploaded'
-      file.save();
+      console.log(count)
     });
 }

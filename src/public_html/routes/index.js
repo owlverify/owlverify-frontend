@@ -4,6 +4,7 @@ const User = require('../../api/models/user.model')
 const File = require('../../api/models/file.model')
 const render = require('../../api/lib/utils').render
 const processInitial = require('../../api/lib/processInitial')
+const startVerification = require('../../api/lib/startVerification')
 
 // SET STORAGE
 var storage = multer.diskStorage({
@@ -121,14 +122,14 @@ module.exports = app => {
   app.get('/files', async (req, res) => {
     let options = {
       sort: 'updated_at'
-    };
+    }
 
     if (req.query.sort)
-      options.sort = req.query.sort;
+      options.sort = req.query.sort
     if (req.query.dir)
-      options.dir = req.query.dir;
+      options.dir = req.query.dir
     if (req.query.offset)
-      options.offset = req.query.offset;
+      options.offset = req.query.offset
 
     File.getAll(req.session.account, options, (err, data) => {
       res.render('files', render(req, {
@@ -141,16 +142,27 @@ module.exports = app => {
   })
 
   app.post('/files/upload', upload.single('csvFile'), async (req, res, next) => {
-    let file = req.file;
+    let file = req.file
 
     file = new File({
       ownerId: req.session.account.id,
       name: file.originalname,
       path: file.path,
-    });
-    await file.save();
+    })
+    await file.save()
 
-    processInitial(file);
+    processInitial(file)
+
+    return res.redirect('/files')
+  })
+
+  app.get('/files/:fileId/start', async (req, res, next) => {
+    const { fileId } = req.param
+
+    let file = await File.findOne({ id: fileId, ownerId: req.session.account.id }).exec()
+
+    //startVerification(file);
+    console.log(file)
 
     return res.redirect('/files')
   })
