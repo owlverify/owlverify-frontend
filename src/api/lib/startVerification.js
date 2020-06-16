@@ -48,12 +48,12 @@ const worker = async.asyncify(function (work) {
       console.log(work)
 
       try {
-        if (work.email || work.Email) {
+        if (work.Email || work.email) {
           var res = await OwlVerify.validateEmail({
-            Email: work.email || work.Email
+            Email: work.Email || work.email
           }).promise()
 
-          work.status = res.status || 'unknown'
+          work.status = res.Status || res.status || 'unknown'
         } else {
           work.status = 'no_email_found'
         }
