@@ -37,7 +37,7 @@
               <a href="/files/{{ file.id }}/start">
                 Start Verification
               </a>
-            {% elsif file.status != 'verified' %}
+            {% elsif file.status == 'verified' %}
               <a href="/files/{{ file.id }}/download">
                 Download
               </a> /
