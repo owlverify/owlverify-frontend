@@ -157,7 +157,7 @@ module.exports = app => {
   })
 
   app.get('/files/:fileId/start', async (req, res, next) => {
-    const { fileId } = req.param
+    const { fileId } = req.params
 
     let file = await File.findOne({ id: fileId, ownerId: req.session.account.id }).exec()
 
