@@ -52,7 +52,7 @@ const worker = async.asyncify(function (work) {
     });
        */
 
-      let data = work
+      let data = JSON.parse(JSON.stringify(work))
       delete data.options
       filesData[work.options.fileName].push(Object.assign(data, {
         status: 'unknown'
