@@ -32,6 +32,7 @@
     "flash": "^1.1.0",
     "helmet": "^3.22.1",
     "http-status": "^1.4.2",
+    "json2csv": "^5.0.1",
     "liquidjs": "^9.12.0",
     "method-override": "^3.0.0",
     "moment": "^2.26.0",
@@ -39,6 +40,7 @@
     "mongoose": "^5.9.18",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
+    "owlhub-sdk": "^0.0.5",
     "serve-favicon": "^2.5.0",
     "winston": "^3.2.1"
   }
