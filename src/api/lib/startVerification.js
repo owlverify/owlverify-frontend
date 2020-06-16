@@ -7,6 +7,8 @@ const filesData = {
 
 }
 
+var dataArr = []
+
 function queue (worker, work, concurrency, options) {
   console.log('started, with concurrency=' + concurrency)
   return new Promise(function (resolve, reject) {
@@ -34,10 +36,7 @@ function queue (worker, work, concurrency, options) {
           reject(firstError)
         })
       })
-      q.push({
-        options,
-        work
-      })
+      q.push(work.map(w => w.options = options))
     }
   })
 }
