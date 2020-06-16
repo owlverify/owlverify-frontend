@@ -3,6 +3,10 @@ const csv = require('csvtojson')
 var fs = require('fs')
 var { Parser } = require('json2csv')
 
+const filesData = {
+
+}
+
 function queue (worker, work, concurrency) {
   console.log('started, with concurrency=' + concurrency)
   return new Promise(function (resolve, reject) {
@@ -54,6 +58,9 @@ const worker = async.asyncify(function (work) {
 })
 
 module.exports = async (file) => {
+  filesData[file.ownerId.toString() + '-' + file._id.toString()] = []
+  console.log(filesData);
+
   csv()
     .fromFile(file.path)
     .then(async (jsonArr) => {
