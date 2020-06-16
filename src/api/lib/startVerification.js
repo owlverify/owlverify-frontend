@@ -51,23 +51,18 @@ const worker = async.asyncify(function (work) {
   })
 })
 
-async function asyncForEach (array, callback) {
-  for (let index = 0; index < array.length; index++) {
-    await callback(array[index], index, array)
-  }
-}
-
 module.exports = async (file) => {
   csv()
     .fromFile(file.path)
     .then(async (jsonArr) => {
-      let count = 0
-      await asyncForEach(jsonArr, async (data) => {
-        if (data.Email || data.email) {
-          count ++;
-        }
-      })
+      queue(worker, jsonArr, 50).then(value => {
+        console.log('complete!!!', value)
 
-      console.log(count)
+        var json2csvParser = new Parser({
+          fields: Object.keys(dataArr[0])
+        })
+        const csv = json2csvParser.parse(dataArr)
+        fs.writeFileSync('/tmp/output-' + file.name, csv)
+      })
     });
 }
