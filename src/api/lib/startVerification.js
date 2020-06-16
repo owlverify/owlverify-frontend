@@ -2,9 +2,9 @@ const async = require('async')
 const csv = require('csvtojson')
 var fs = require('fs')
 var { Parser } = require('json2csv')
-var OWLHUB = require("owlhub-sdk")
+var OWLHUB = require('owlhub-sdk')
 
-var OwlVerify = new OWLHUB.OwlVerify({apiVersion: '2020-05-10'});
+var OwlVerify = new OWLHUB.OwlVerify({ apiVersion: '2020-05-10' })
 
 const filesData = {}
 
@@ -48,28 +48,25 @@ const worker = async.asyncify(function (work) {
       console.log(work)
 
       try {
-        var res = await OwlVerify.validateEmail({
-          Email: 'hello@example.com'
-        }).promise();
+        if (work.email || work.Email) {
+          var res = await OwlVerify.validateEmail({
+            Email: work.email || work.Email
+          }).promise()
 
-        console.log(res)
-      }catch (e) {
-        console.log('error')
-        console.log(e)
+          work.status = res.status || 'unknown'
+        } else {
+          work.status = 'no_email_found'
+        }
+      } catch (e) {
+        console.log('error', e)
+        work.status = 'Internal Error. contact at support@owlhub.io'
+      } finally {
+        let data = JSON.parse(JSON.stringify(work))
+        delete data.options
+        filesData[work.options.fileName].push(Object.assign(data, {
+          status: 'unknown'
+        }))
       }
-      /*
-      csv()
-    .fromFile(file.path)
-    .then(async (jsonArr) => {
-      console.log(jsonArr)
-    });
-       */
-
-      let data = JSON.parse(JSON.stringify(work))
-      delete data.options
-      filesData[work.options.fileName].push(Object.assign(data, {
-        status: 'unknown'
-      }))
 
       resolve()
     })()
