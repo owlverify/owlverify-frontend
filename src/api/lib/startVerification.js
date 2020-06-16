@@ -6,20 +6,6 @@ var OWLHUB = require("owlhub-sdk")
 
 var OwlVerify = new OWLHUB.OwlVerify({apiVersion: '2020-05-10'});
 
-(async () => {
-  try {
-    var res = await OwlVerify.validateEmail({
-      Email: 'hello@example.com'
-    }).promise();
-
-    console.log(res)
-  }catch (e) {
-    console.log('error')
-    console.log(e)
-  }
-})();
-
-
 const filesData = {}
 
 var dataArr = []
@@ -61,6 +47,16 @@ const worker = async.asyncify(function (work) {
     (async () => {
       console.log(work)
 
+      try {
+        var res = await OwlVerify.validateEmail({
+          Email: 'hello@example.com'
+        }).promise();
+
+        console.log(res)
+      }catch (e) {
+        console.log('error')
+        console.log(e)
+      }
       /*
       csv()
     .fromFile(file.path)
