@@ -27,6 +27,10 @@ const fileSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  outputPath: {
+    type: String,
+    trim: true
+  },
   status: {
     type: String,
     enum: status,

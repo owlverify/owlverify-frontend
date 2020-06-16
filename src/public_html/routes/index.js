@@ -174,6 +174,14 @@ module.exports = app => {
     return res.redirect('/files')
   })
 
+  app.get('/files/:fileId/download', async (req, res, next) => {
+    const { fileId } = req.params
+
+    let file = await File.findOne({ _id: fileId.toObjectId(), ownerId: req.session.account.id }).exec()
+
+    res.download(file.outputPath);
+  })
+
   // Logout
   app.get('/logout', (req, res) => {
     req.session.destroy()
