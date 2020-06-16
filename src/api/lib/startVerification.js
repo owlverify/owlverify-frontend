@@ -63,6 +63,7 @@ const worker = async.asyncify(function (work) {
         console.log('error', e)
         work.status = 'Internal Error. contact at support@owlhub.io'
       } finally {
+        console.log(work)
         let data = JSON.parse(JSON.stringify(work))
         delete data.options
         filesData[work.options.fileName].push(Object.assign(data, {
