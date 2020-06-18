@@ -188,14 +188,24 @@ userSchema.statics = {
     }
   },
 
-  dashboardData(user, fn) {
+  async dashboardData(user, fn) {
     let data = {
       totalFiles: 0,
       files: [],
       credits: 0
     }
 
-    return fn(null, data)
+    try {
+      data.totalFiles = await File.countDocuments({
+        ownerId: user.id
+      })
+
+      console.log(data.totalFiles)
+    } catch (e) {
+      console.log(e)
+    } finally {
+      return fn(null, data)
+    }
   }
 }
 
