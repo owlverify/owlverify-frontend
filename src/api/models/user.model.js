@@ -213,7 +213,6 @@ userSchema.statics = {
       })
         .exec()
 
-      console.log(data)
     } catch (e) {
       console.log(e)
     } finally {
