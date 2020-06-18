@@ -188,7 +188,26 @@ module.exports = app => {
 
     const priceId = process.env['PRICE_ID_' + creditPlan.toUpperCase()]
 
-    console.log(priceId, creditPlan);
+    if (!priceId) {
+      return res.redirect('/')
+    }
+
+    const domainUrl = 'http://localhost';
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: process.env.PAYMENT_METHODS.split(', '),
+      mode: 'payment',
+      locale: 'en',
+      line_items: [
+        {
+          price: priceId,
+          quantity: 1
+        },
+      ],
+      // ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
+      success_url: `${domainURL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${domainURL}/canceled.html`,
+    });
 
     res.send('ok')
   })
