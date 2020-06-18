@@ -25,7 +25,7 @@ var storage = multer.diskStorage({
     })
   },
   filename: function (req, file, cb) {
-    cb(null, (file.originalname.replace(/\.[^/.]+$/, "")) + '-' + Date.now() + '.csv')
+    cb(null, (file.originalname.replace(/\.[^/.]+$/, '')) + '-' + Date.now() + '.csv')
   }
 })
 var upload = multer({ storage: storage })
@@ -179,11 +179,13 @@ module.exports = app => {
 
     let file = await File.findOne({ _id: fileId.toObjectId(), ownerId: req.session.account.id }).exec()
 
-    res.download(file.outputPath);
+    res.download(file.outputPath)
   })
 
-  app.get('/add-credits', async (req, res, next) => {
-    const billingPlan = req.query.plan || ''
+  app.get('/billing', async (req, res, next) => {
+    const creditPlan = req.query['credit-plan'] || ''
+
+    console.log(creditPlan)
 
     res.send('ok')
   })
