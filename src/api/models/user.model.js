@@ -192,16 +192,26 @@ userSchema.statics = {
   async dashboardData (user, fn) {
     let data = {
       totalFiles: 0,
-      files: [],
-      credits: 0
+      credits: 0,
+      files: []
     }
 
     try {
-      data.credits = await this.findById(user.id).exec()
+      data.credits = (await this.findById(user.id).exec()).credits
 
       data.totalFiles = await File.countDocuments({
         ownerId: user.id
       })
+
+      data.files = await File.find({
+        ownerId: user.id
+      }, null, {
+        limit: 10,
+        sort: {
+          updatedAt: -1
+        }
+      })
+        .exec()
 
       console.log(data)
     } catch (e) {
