@@ -211,7 +211,13 @@ module.exports = app => {
 
     console.log(session)
 
-    res.send('ok')
+    res.render('billing-add-credit', render(req, {
+      stripe: {
+        publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+        sessionId: session.id
+      }
+    }))
+
   })
 
   // Logout

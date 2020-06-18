@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="https://js.stripe.com/v3/?advancedFraudSignals=false"></script>
+</head>
+<body>
+    Please wait while we redirect to the payment gateway
+
+<script>
+    var stripe = Stripe({{ stripe.publishableKey }});
+    stripe
+      .redirectToCheckout({
+        sessionId: {{ stripe.sessionId }},
+      })
+</script>
+</body>
+<html>
