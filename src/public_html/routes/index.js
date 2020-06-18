@@ -5,6 +5,7 @@ const File = require('../../api/models/file.model')
 const render = require('../../api/lib/utils').render
 const processInitial = require('../../api/lib/processInitial')
 const startVerification = require('../../api/lib/startVerification')
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
 String.prototype.toObjectId = function () {
   var ObjectId = (require('mongoose').Types.ObjectId)

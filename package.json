@@ -42,6 +42,7 @@
     "multer": "^1.4.2",
     "owlhub-sdk": "^0.0.5",
     "serve-favicon": "^2.5.0",
+    "stripe": "^8.63.0",
     "winston": "^3.2.1"
   }
 }
