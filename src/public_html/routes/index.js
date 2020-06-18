@@ -182,6 +182,12 @@ module.exports = app => {
     res.download(file.outputPath);
   })
 
+  app.get('/add-credits', async (req, res, next) => {
+    const billingPlan = req.query.plan || ''
+
+    res.send('ok')
+  })
+
   // Logout
   app.get('/logout', (req, res) => {
     req.session.destroy()
