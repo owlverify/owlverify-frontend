@@ -161,7 +161,7 @@ userSchema.statics = {
         resetToken
       })).save()
 
-      console.log(resetToken);
+      console.log(resetToken)
 
       fn(null, {})
 
@@ -189,7 +189,7 @@ userSchema.statics = {
     }
   },
 
-  async dashboardData(user, fn) {
+  async dashboardData (user, fn) {
     let data = {
       totalFiles: 0,
       files: [],
@@ -197,11 +197,13 @@ userSchema.statics = {
     }
 
     try {
+      data.credits = await this.findById(user.id).exec()
+
       data.totalFiles = await File.countDocuments({
         ownerId: user.id
       })
 
-      console.log(data.totalFiles)
+      console.log(data)
     } catch (e) {
       console.log(e)
     } finally {
