@@ -186,7 +186,9 @@ module.exports = app => {
   app.get('/billing', async (req, res, next) => {
     const creditPlan = req.query['credit-plan'] || ''
 
-    console.log(creditPlan)
+    const priceId = process.env['PRICE_ID_' + creditPlan.toUpperCase()]
+
+    console.log(priceId, creditPlan);
 
     res.send('ok')
   })
