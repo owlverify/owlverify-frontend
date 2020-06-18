@@ -201,7 +201,7 @@ module.exports = app => {
       line_items: [
         {
           price: priceId,
-          quantity: 1
+          quantity: process.env['QUANTITY_' + creditPlan.toUpperCase()]
         },
       ],
       // ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
