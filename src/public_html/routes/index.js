@@ -209,6 +209,8 @@ module.exports = app => {
       cancel_url: `${domainURL}/canceled.html`,
     })
 
+    console.log(session)
+
     res.send('ok')
   })
 
