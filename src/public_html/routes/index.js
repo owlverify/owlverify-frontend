@@ -183,7 +183,7 @@ module.exports = app => {
     res.download(file.outputPath)
   })
 
-  app.get('/billing', async (req, res, next) => {
+  app.get('/billing/add-credit', async (req, res, next) => {
     const creditPlan = req.query['credit-plan'] || ''
 
     const priceId = process.env['PRICE_ID_' + creditPlan.toUpperCase()]
@@ -192,7 +192,7 @@ module.exports = app => {
       return res.redirect('/')
     }
 
-    const domainUrl = 'http://localhost';
+    const domainURL = 'http://localhost'
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: process.env.PAYMENT_METHODS.split(', '),
@@ -207,7 +207,7 @@ module.exports = app => {
       // ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
       success_url: `${domainURL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${domainURL}/canceled.html`,
-    });
+    })
 
     res.send('ok')
   })
