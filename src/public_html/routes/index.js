@@ -218,7 +218,11 @@ module.exports = app => {
   })
 
   app.get('/billing/success', async (req, res) => {
-    const { sessionId } = req.query;
+    const sessionId = req.query.session_id;
+    if (!sessionId) {
+      return res.redirect('/')
+    }
+
     const session = await stripe.checkout.sessions.retrieve(sessionId);
     res.send(session);
   })
