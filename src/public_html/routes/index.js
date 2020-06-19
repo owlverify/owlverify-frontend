@@ -2,6 +2,7 @@ const multer = require('multer')
 const fs = require('fs')
 const User = require('../../api/models/user.model')
 const File = require('../../api/models/file.model')
+const Payment = require('../../api/models/payment.model')
 const render = require('../../api/lib/utils').render
 const processInitial = require('../../api/lib/processInitial')
 const startVerification = require('../../api/lib/startVerification')
@@ -209,6 +210,15 @@ module.exports = app => {
       cancel_url: `${domainURL}/billing/canceled`,
     })
 
+    await (new Payment({
+      ownerId: req.session.account.id,
+      stripeSessionId: session.id,
+      plan: creditPlan,
+      priceId,
+      stripePreSession: session,
+      quantity: process.env['QUANTITY_' + creditPlan.toUpperCase()]
+    })).save()
+
     res.render('billing-add-credit', render(req, {
       stripe: {
         publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
@@ -227,22 +237,12 @@ module.exports = app => {
     const payment = await stripe.paymentIntents.retrieve(session.payment_intent)
 
     if (payment.amount_received == payment.amount) {
-      console.log(session)
-      const priceId = session.line_items[0].price
       let credits = 0
-      switch (priceId) {
-        case process.env['PRICE_ID_DEV']:
-          credits = process.env['QUANTITY_DEV']
-          break
-        case process.env['PRICE_ID_PRO']:
-          credits = process.env['QUANTITY_PRO']
-          break
-        case process.env['PRICE_ID_BIZ']:
-          credits = process.env['QUANTITY_BIZ']
-          break
+      let data = Payment.findOne({ownerId: req.session.account.id, stripeSessionId: session.id })
+      console.log(data)
+      if (data) {
+        await User.findOneAndUpdate(res.session.account.id, { $inc: { credits } }).exec()
       }
-
-      await User.findOneAndUpdate(res.session.account.id, { $inc: { credits } }).exec()
     }
 
     res.redirect('/dashboard')
