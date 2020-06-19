@@ -240,10 +240,10 @@ module.exports = app => {
       let paymentInfo = Payment.findOne({ownerId: req.session.account.id, stripeSessionId: session.id }).exec()
       if (paymentInfo) {
         const credits = process.env['QUANTITY_' + (paymentInfo.plan || '').toUpperCase()] || 0
-        paymentInfo.status = 'paid';
-        paymentInfo.save()
-
         await User.findOneAndUpdate(req.session.account.id, { $inc: { credits } }).exec()
+
+        paymentInfo.status = 'paid';
+        await paymentInfo.save()
       }
     }
 
