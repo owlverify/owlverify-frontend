@@ -218,16 +218,33 @@ module.exports = app => {
   })
 
   app.get('/billing/success', async (req, res) => {
-    const sessionId = req.query.session_id;
+    const sessionId = req.query.session_id
     if (!sessionId) {
       return res.redirect('/')
     }
 
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    const session = await stripe.checkout.sessions.retrieve(sessionId)
+    const payment = await stripe.paymentIntents.retrieve(session.payment_intent)
 
-    const payment = await stripe.paymentIntents.retrieve(session.payment_intent);
+    if (payment.amount_received == payment.amount) {
+      const priceId = session.line_items[0].price
+      let credits = 0
+      switch (priceId) {
+        case process.env['PRICE_ID_DEV']:
+          credits = process.env['QUANTITY_DEV']
+          break
+        case process.env['PRICE_ID_PRO']:
+          credits = process.env['QUANTITY_PRO']
+          break
+        case process.env['PRICE_ID_BIZ']:
+          credits = process.env['QUANTITY_BIZ']
+          break
+      }
 
-    res.send(payment);
+      await User.findOneAndUpdate(res.session.account.id, { $inc: { credits } }).exec()
+    }
+
+    res.redirect('/dashboard')
   })
 
   // Logout
