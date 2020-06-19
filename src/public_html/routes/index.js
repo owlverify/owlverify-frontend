@@ -201,15 +201,13 @@ module.exports = app => {
       line_items: [
         {
           price: priceId,
-          quantity: process.env['QUANTITY_' + creditPlan.toUpperCase()]
+          quantity: 1 // process.env['QUANTITY_' + creditPlan.toUpperCase()]
         },
       ],
       // ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
       success_url: `${domainURL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${domainURL}/canceled.html`,
     })
-
-    console.log(session)
 
     res.render('billing-add-credit', render(req, {
       stripe: {
