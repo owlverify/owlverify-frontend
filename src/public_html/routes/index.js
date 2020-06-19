@@ -168,10 +168,15 @@ module.exports = app => {
 
     let file = await File.findOne({ _id: fileId.toObjectId(), ownerId: req.session.account.id }).exec()
 
-    file.status = 'processing'
-    await file.save()
+    const user = await User.findById(req.session.account.id).exec()
+    if (user.credits > file.total){
+      file.status = 'processing'
+      await file.save()
 
-    startVerification(file)
+      await User.findOneAndUpdate(req.session.account.id, { $inc: { credits: file.total } }).exec()
+
+      startVerification(file)
+    }
 
     return res.redirect('/files')
   })
