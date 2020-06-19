@@ -238,7 +238,7 @@ module.exports = app => {
 
     if (payment.amount_received == payment.amount) {
       let credits = 0
-      let data = Payment.findOne({ownerId: req.session.account.id, stripeSessionId: session.id })
+      let data = Payment.findOne({ownerId: req.session.account.id, stripeSessionId: session.id }).exec()
       console.log(data)
       if (data) {
         await User.findOneAndUpdate(req.session.account.id, { $inc: { credits } }).exec()
