@@ -227,6 +227,7 @@ module.exports = app => {
     const payment = await stripe.paymentIntents.retrieve(session.payment_intent)
 
     if (payment.amount_received == payment.amount) {
+      console.log(session)
       const priceId = session.line_items[0].price
       let credits = 0
       switch (priceId) {
