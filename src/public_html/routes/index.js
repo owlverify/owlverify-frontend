@@ -239,7 +239,7 @@ module.exports = app => {
     if (payment.amount_received == payment.amount) {
       const paymentInfo = await Payment.findOne({ownerId: req.session.account.id, stripeSessionId: session.id }).exec()
       console.log(paymentInfo)
-      if (paymentInfo) {
+      if (paymentInfo && paymentInfo.status == 'unpaid') {
         const credits = process.env['QUANTITY_' + (paymentInfo.plan || '').toUpperCase()] || 0
         await User.findOneAndUpdate(req.session.account.id, { $inc: { credits } }).exec()
 
