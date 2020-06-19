@@ -194,8 +194,6 @@ module.exports = app => {
 
     const domainURL = req.protocol + '://' + req.get('host')
 
-    console.log(domainURL)
-
     const session = await stripe.checkout.sessions.create({
       payment_method_types: process.env.PAYMENT_METHODS.split(', '),
       mode: 'payment',
@@ -217,7 +215,12 @@ module.exports = app => {
         sessionId: session.id
       }
     }))
+  })
 
+  app.get('/billing/success', async (req, res) => {
+    const { sessionId } = req.query;
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    res.send(session);
   })
 
   // Logout
