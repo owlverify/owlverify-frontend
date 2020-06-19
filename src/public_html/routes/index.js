@@ -192,6 +192,8 @@ module.exports = app => {
       return res.redirect('/')
     }
 
+    console.log(req)
+
     const domainURL = req.baseUrl
 
     console.log(domainURL)
