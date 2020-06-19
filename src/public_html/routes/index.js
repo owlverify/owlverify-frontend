@@ -224,7 +224,10 @@ module.exports = app => {
     }
 
     const session = await stripe.checkout.sessions.retrieve(sessionId);
-    res.send(session);
+
+    const payment = await stripe.paymentIntents.retrieve(session.payment_intent);
+
+    res.send(payment);
   })
 
   // Logout
