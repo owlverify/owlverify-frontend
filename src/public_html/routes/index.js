@@ -192,7 +192,9 @@ module.exports = app => {
       return res.redirect('/')
     }
 
-    const domainURL = 'http://localhost'
+    const domainURL = req.hostname
+
+    console.log(domainURL)
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: process.env.PAYMENT_METHODS.split(', '),
@@ -205,8 +207,8 @@ module.exports = app => {
         },
       ],
       // ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
-      success_url: `${domainURL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${domainURL}/canceled.html`,
+      success_url: `${domainURL}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${domainURL}/billing/canceled`,
     })
 
     res.render('billing-add-credit', render(req, {
