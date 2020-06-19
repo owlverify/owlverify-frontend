@@ -237,7 +237,7 @@ module.exports = app => {
     const payment = await stripe.paymentIntents.retrieve(session.payment_intent)
 
     if (payment.amount_received == payment.amount) {
-      const paymentInfo = Payment.findOne({ownerId: req.session.account.id, stripeSessionId: session.id }).exec()
+      const paymentInfo = await Payment.findOne({ownerId: req.session.account.id, stripeSessionId: session.id }).exec()
       console.log(paymentInfo)
       if (paymentInfo) {
         const credits = process.env['QUANTITY_' + (paymentInfo.plan || '').toUpperCase()] || 0
