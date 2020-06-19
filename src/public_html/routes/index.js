@@ -173,7 +173,7 @@ module.exports = app => {
       file.status = 'processing'
       await file.save()
 
-      await User.findOneAndUpdate(req.session.account.id, { $inc: { credits: file.total } }).exec()
+      await User.findOneAndUpdate(req.session.account.id, { $inc: { credits: (-1 * file.total) } }).exec()
 
       startVerification(file)
     }
