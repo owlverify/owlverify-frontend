@@ -192,11 +192,7 @@ module.exports = app => {
       return res.redirect('/')
     }
 
-    console.log(req)
-
-    const domainURL = req.baseUrl
-
-    console.log(domainURL)
+    const domainURL = req.headers.host || req.headers.Host
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: process.env.PAYMENT_METHODS.split(', '),
