@@ -241,10 +241,10 @@ module.exports = app => {
       console.log(paymentInfo)
       if (paymentInfo && paymentInfo.status == 'unpaid') {
         const credits = process.env['QUANTITY_' + (paymentInfo.plan || '').toUpperCase()] || 0
-        await User.findOneAndUpdate(req.session.account.id, { $inc: { credits } }).exec()
-
         paymentInfo.status = 'paid';
         await paymentInfo.save()
+
+        await User.findOneAndUpdate(req.session.account.id, { $inc: { credits } }).exec()
       }
     }
 
