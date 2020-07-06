@@ -52,12 +52,15 @@ const worker = async.asyncify(function (work) {
           }).promise()
 
           work.status = (validationResult.Status || 'unknown').toUpperCase()
+          work.is_disposable = (validationResult.Disposable || 'false').toUpperCase()
         } else {
           work.status = 'NO_EMAIL_FOUND'
+          work.is_disposable = 'NO_EMAIL_FOUND'
         }
       } catch (e) {
         console.log('error', e)
         work.status = 'Internal Error. contact at support@owlhub.io'
+        work.is_disposable = 'Internal Error. contact at support@owlhub.io'
       } finally {
         let data = JSON.parse(JSON.stringify(work))
         delete data.options
