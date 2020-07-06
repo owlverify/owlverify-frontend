@@ -976,10 +976,10 @@ one-time@0.0.4:
   resolved "https://registry.yarnpkg.com/one-time/-/one-time-0.0.4.tgz#f8cdf77884826fe4dff93e3a9cc37b1e4480742e"
   integrity sha1-+M33eISCb+Tf+T46nMN7HkSAdC4=
 
-owlhub-sdk@^0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/owlhub-sdk/-/owlhub-sdk-0.0.5.tgz#f039e87106407e0c67785d945f04fbbd4d50a6cf"
-  integrity sha512-jM/s3T99I7WnIQyXZ6OWKu8KFeGk4RnhR4WieXk9BgL8qCur6kcGUvddaidje8MoWakWw1C+ezKNmP8Vl8PICQ==
+owlhub-sdk@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/owlhub-sdk/-/owlhub-sdk-0.0.6.tgz#d58a2777a88789a335affdaeb02a3c15edb00bac"
+  integrity sha512-hb7E72+mj9rqsvhFYIxwQ396AFtMREohJtrdplrAmcYeUxoJgWD/qCvPJZrkJ4uxj5KCQ0d5TwYDEYC+PmUQ4Q==
   dependencies:
     buffer "^5.6.0"
     jmespath "^0.15.0"
