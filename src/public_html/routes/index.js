@@ -6,6 +6,7 @@ const Payment = require('../../api/models/payment.model')
 const render = require('../../api/lib/utils').render
 const processInitial = require('../../api/lib/processInitial')
 const startVerification = require('../../api/lib/startVerification')
+const validateToken = require('../../api/lib/validateToken')
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
 String.prototype.toObjectId = function () {
@@ -79,10 +80,11 @@ module.exports = app => {
       return res.redirect(`https://id.owlhub.io/auth/login?redirect-uri=${req.protocol}://${req.get('host')}/login`)
     }
 
-    console.log(token)
+    validateToken(token, (err, data) => {
 
-    res.json({
-      token
+      return res.json({
+        token
+      })
     })
 
     /*
