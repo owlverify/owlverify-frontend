@@ -60,40 +60,35 @@ userSchema.statics = {
     if (!options)
       return fn('No data provided.')
 
-    let { email, password } = options
+    let { email } = options
 
     email = email || ''
     email = email.toLowerCase().trim()
 
     try {
-      const user = await this.findOne({ email }).exec()
+      let user = await this.findOne({ email }).exec()
 
       if (!user)
-        return fn('User not found.')
+        user = await (new User({
+          email: email,
+          //reg_date: new Date()
+        })).save()
 
-      crypto.pbkdf2(password, user.salt, 5000, 32, 'sha512', async (err, derivedKey) => {
-        if (err)
-          return fn('There has been an internal error. Please try again later.')
+      let json = {
+        id: user._id,
+        email: user.email,
+        //reg_date: doc.reg_date
+      }
 
-        let hash = Buffer.from(derivedKey).toString('base64')
-        if (hash !== user.password)
-          return fn('Wrong password. Confirm and try again.')
+      /*
+      if (user.payid)
+        json.payid = user.payid
 
-        let json = {
-          id: user._id,
-          email: user.email,
-          //reg_date: doc.reg_date
-        }
+      // Update last login
+      //await this.update({ email: email }, { $set: { ll: new Date() } }).exec()
+      */
+      return fn(null, json)
 
-        /*
-        if (user.payid)
-          json.payid = user.payid
-
-        // Update last login
-        //await this.update({ email: email }, { $set: { ll: new Date() } }).exec()
-        */
-        return fn(null, json)
-      })
     } catch (e) {
       console.log(e)
       return fn('There has been an internal error. Please try again later.')
@@ -133,56 +128,6 @@ userSchema.statics = {
         id: result._id,
         email: result.email,
       })
-    } catch (e) {
-      console.log(e)
-      return fn('There has been an internal error. Please try again later.')
-    }
-  },
-
-  async recoverPassword (data, fn) {
-    let email = data.email || ''
-    try {
-      let doc = await this.findOne({ email: email }).exec()
-
-      if (!doc)
-        return fn('The specified email does not exist.')
-
-      let salt = crypto.randomBytes(128).toString('base64')
-      let derivedKey = await crypto.pbkdf2Sync(salt, salt, 5000, 32, 'sha512')
-
-      let resetToken = Buffer.from(derivedKey).toString('base64')
-      let userId = doc._id.toHexString()
-
-      // Delete all recover requests for user
-      await Recover.deleteMany({ userId }).exec()
-
-      await (new Recover({
-        userId,
-        resetToken
-      })).save()
-
-      console.log(resetToken)
-
-      fn(null, {})
-
-      /*
-      // Add this one
-      dbo.db().collection('recover').insert({
-        hash: hash,
-        uid: uid,
-        date: new Date()
-      }, (err, result) => {
-        // Send email
-        let tmplObj = {
-          hash: encodeURIComponent(hash),
-          uid: uid,
-          domain: process.env.HOST
-        }
-
-        Mail.send(email, 'Reset your password', 'recover', tmplObj, fn)
-      })
-
-       */
     } catch (e) {
       console.log(e)
       return fn('There has been an internal error. Please try again later.')

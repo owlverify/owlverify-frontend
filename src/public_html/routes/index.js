@@ -81,29 +81,26 @@ module.exports = app => {
     }
 
     validateToken(token, (err, data) => {
+      User.sessionLogin(data.payload, (err, doc) => {
+        if (err) {
+          req.flash('error', err)
+          return res.redirect('/login')
+        }
+
+        req.session.account = doc
+        if (req.session.ref) {
+          let ref = req.session.ref
+          delete req.session.ref
+          return res.redirect(ref)
+        }
+
+        return res.redirect('/dashboard')
+      })
 
       return res.json({
         data
       })
     })
-
-    /*
-    User.sessionLogin(req.body, (err, doc) => {
-      if (err) {
-        req.flash('error', err)
-        return res.redirect('/login')
-      }
-
-      req.session.account = doc
-      if (req.session.ref) {
-        let ref = req.session.ref
-        delete req.session.ref
-        return res.redirect(ref)
-      }
-
-      return res.redirect('/dashboard')
-    })
-     */
   })
 
   app.get('/dashboard', (req, res) => {
