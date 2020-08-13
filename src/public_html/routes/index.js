@@ -81,6 +81,11 @@ module.exports = app => {
 
     console.log(token)
 
+    res.json({
+      token
+    })
+
+    /*
     User.sessionLogin(req.body, (err, doc) => {
       if (err) {
         req.flash('error', err)
@@ -96,6 +101,7 @@ module.exports = app => {
 
       return res.redirect('/dashboard')
     })
+     */
   })
 
   app.get('/dashboard', (req, res) => {
