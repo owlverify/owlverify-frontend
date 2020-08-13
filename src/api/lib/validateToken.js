@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken')
 
 module.exports = async (token, callback) => {
   const decodedJwt = jwt.decode(token, { complete: true })
@@ -8,5 +8,7 @@ module.exports = async (token, callback) => {
     return callback(new Error('Not a valid JWT token'))
   }
 
-  callback(null, data)
+  console.log(decodedJwt)
+
+  callback(null, {})
 }
