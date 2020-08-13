@@ -55,23 +55,6 @@ module.exports = app => {
     }))
   })
 
-  //Signup
-  app.get('/signup', (req, res) => {
-    return res.redirect('https://id.owlhub.io/auth/login?redirect-uri=https://owlverify.universal-esolutions.com/login')
-  })
-
-  app.post('/signup', (req, res) => {
-    User.createUser(req.body, (err, user) => {
-      if (err) {
-        req.flash('error', err)
-        return res.redirect('/signup')
-      }
-
-      req.session.account = user
-      return res.redirect('/dashboard')
-    })
-  })
-
   // Login
   app.get('/login', (req, res) => {
     const { token } = req.query
