@@ -83,7 +83,7 @@ module.exports = app => {
     validateToken(token, (err, data) => {
 
       return res.json({
-        token
+        data
       })
     })
 
