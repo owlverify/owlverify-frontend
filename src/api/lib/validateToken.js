@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const jwkToPem = require('jwk-to-pem')
 const request = require('request')
 
 module.exports = async (token, callback) => {
