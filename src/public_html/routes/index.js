@@ -81,12 +81,6 @@ module.exports = app => {
 
     console.log(token)
 
-    res.render('login', render(req, {
-      title: 'Login'
-    }))
-  })
-
-  app.post('/login', (req, res) => {
     User.sessionLogin(req.body, (err, doc) => {
       if (err) {
         req.flash('error', err)
@@ -101,24 +95,6 @@ module.exports = app => {
       }
 
       return res.redirect('/dashboard')
-    })
-  })
-
-  // Recover
-  app.get('/recover', (req, res) => {
-    res.render('recover', render(req, {
-      title: 'Recover password'
-    }))
-  })
-
-  app.post('/recover', (req, res) => {
-    User.recoverPassword(req.body, (err, doc) => {
-      if (err)
-        req.flash('error', err)
-      else
-        req.flash('info', 'Password reset mail has been sent')
-
-      return res.redirect('/recover')
     })
   })
 
