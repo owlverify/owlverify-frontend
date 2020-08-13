@@ -73,6 +73,14 @@ module.exports = app => {
 
   // Login
   app.get('/login', (req, res) => {
+    const { token } = req.query
+
+    if (!token) {
+      return res.redirect("https://id.owlhub.io/auth/login?redirect-uri=https://owlverify.universal-esolutions.com/login")
+    }
+
+    console.log(token)
+
     res.render('login', render(req, {
       title: 'Login'
     }))
