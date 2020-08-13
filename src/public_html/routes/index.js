@@ -76,7 +76,7 @@ module.exports = app => {
     const { token } = req.query
 
     if (!token) {
-      return res.redirect("https://id.owlhub.io/auth/login?redirect-uri=https://owlverify.universal-esolutions.com/login")
+      return res.redirect(`https://id.owlhub.io/auth/login?redirect-uri=${req.get('host')}/login`)
     }
 
     console.log(token)
