@@ -96,10 +96,6 @@ module.exports = app => {
 
         return res.redirect('/dashboard')
       })
-
-      return res.json({
-        data
-      })
     })
   })
 
