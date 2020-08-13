@@ -56,7 +56,7 @@ module.exports = app => {
 
   //Signup
   app.get('/signup', (req, res) => {
-    return res.redirect("https://id.owlhub.io/auth/login?redirect-uri=https://owlverify.universal-esolutions.com/login")
+    return res.redirect('https://id.owlhub.io/auth/login?redirect-uri=https://owlverify.universal-esolutions.com/login')
   })
 
   app.post('/signup', (req, res) => {
@@ -76,7 +76,7 @@ module.exports = app => {
     const { token } = req.query
 
     if (!token) {
-      return res.redirect(`https://id.owlhub.io/auth/login?redirect-uri=${req.get('host')}/login`)
+      return res.redirect(`https://id.owlhub.io/auth/login?redirect-uri=${req.get('protocol')}://${req.get('host')}/login`)
     }
 
     console.log(token)
@@ -175,7 +175,7 @@ module.exports = app => {
     let file = await File.findOne({ _id: fileId.toObjectId(), ownerId: req.session.account.id }).exec()
 
     const user = await User.findById(req.session.account.id).exec()
-    if (user.credits > file.total){
+    if (user.credits > file.total) {
       file.status = 'processing'
       await file.save()
 
@@ -248,11 +248,11 @@ module.exports = app => {
     const payment = await stripe.paymentIntents.retrieve(session.payment_intent)
 
     if (payment.amount_received == payment.amount) {
-      const paymentInfo = await Payment.findOne({ownerId: req.session.account.id, stripeSessionId: session.id }).exec()
+      const paymentInfo = await Payment.findOne({ ownerId: req.session.account.id, stripeSessionId: session.id }).exec()
       console.log(paymentInfo)
       if (paymentInfo && paymentInfo.status == 'unpaid') {
         const credits = process.env['QUANTITY_' + (paymentInfo.plan || '').toUpperCase()] || 0
-        paymentInfo.status = 'paid';
+        paymentInfo.status = 'paid'
         await paymentInfo.save()
 
         await User.findOneAndUpdate(req.session.account.id, { $inc: { credits } }).exec()
