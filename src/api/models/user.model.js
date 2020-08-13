@@ -22,18 +22,6 @@ const userSchema = new mongoose.Schema({
     trim: true,
     lowercase: true,
   },
-  password: {
-    type: String,
-    required: true,
-    minlength: 6,
-    maxlength: 512,
-  },
-  salt: {
-    type: String,
-    required: true,
-    minlength: 6,
-    maxlength: 512,
-  },
   role: {
     type: String,
     enum: roles,
@@ -89,45 +77,6 @@ userSchema.statics = {
       */
       return fn(null, json)
 
-    } catch (e) {
-      console.log(e)
-      return fn('There has been an internal error. Please try again later.')
-    }
-  },
-
-  async createUser (data, fn) {
-    if (!data)
-      return fn('No data provided')
-
-    let email = data.email || ''
-    let password = data.password || ''
-
-    email = email.toLowerCase().trim()
-    if (!/^\S+@\S+$/.test(email))
-      return fn('Email invalid. Confirm and try again')
-    if (password.length < 6)
-      return fn('Password should have at least six characters')
-
-    try {
-      let user = await this.findOne({ email }).exec()
-
-      if (user)
-        return fn('This email is already in use.')
-
-      let salt = crypto.randomBytes(128).toString('base64')
-      let derivedKey = crypto.pbkdf2Sync(password, salt, 5000, 32, 'sha512')
-
-      let result = await (new User({
-        email: email,
-        password: Buffer.from(derivedKey).toString('base64'),
-        salt: salt,
-        //reg_date: new Date()
-      })).save()
-
-      return fn(null, {
-        id: result._id,
-        email: result.email,
-      })
     } catch (e) {
       console.log(e)
       return fn('There has been an internal error. Please try again later.')
