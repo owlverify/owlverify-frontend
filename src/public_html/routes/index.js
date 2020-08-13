@@ -56,9 +56,7 @@ module.exports = app => {
 
   //Signup
   app.get('/signup', (req, res) => {
-    res.render('signup', render(req, {
-      title: 'Signup'
-    }))
+    return res.redirect("https://id.owlhub.io/auth/login?redirect-uri=https://owlverify.universal-esolutions.com/login")
   })
 
   app.post('/signup', (req, res) => {
