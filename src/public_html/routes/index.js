@@ -207,7 +207,7 @@ module.exports = app => {
       plan: creditPlan,
       priceId,
       stripePreSession: session,
-      quantity: process.env['QUANTITY_' + creditPlan.toUpperCase()]
+      quantity: (userInfo.stripe && userInfo.stripe.customerId && userInfo.stripe.priceId) ? quantity : process.env['QUANTITY_' + creditPlan.toUpperCase()]
     })).save()
 
     res.render('billing-add-credit', render(req, {
@@ -231,7 +231,13 @@ module.exports = app => {
       const paymentInfo = await Payment.findOne({ ownerId: req.session.account.id, stripeSessionId: session.id }).exec()
       console.log(paymentInfo)
       if (paymentInfo && paymentInfo.status === 'unpaid') {
-        const credits = process.env['QUANTITY_' + (paymentInfo.plan || '').toUpperCase()] || 0
+        let credits = process.env['QUANTITY_' + (paymentInfo.plan || '').toUpperCase()] || 0
+
+        const userInfo = await User.findOne({ _id: req.session.account.id }).exec()
+        if (userInfo.stripe && userInfo.stripe.customerId && userInfo.stripe.priceId) {
+          credits = paymentInfo.quantity
+        }
+
         paymentInfo.status = 'paid'
         await paymentInfo.save()
 
