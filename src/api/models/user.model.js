@@ -32,11 +32,13 @@ const userSchema = new mongoose.Schema({
   stripe: {
     customerId: {
       type: String,
-      default: ''
+      default: '',
+      trim: true,
     },
     priceId: {
       type: String,
-      default: ''
+      default: '',
+      trim: true,
     },
     min: {
       type: Number,

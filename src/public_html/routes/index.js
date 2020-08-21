@@ -159,17 +159,17 @@ module.exports = app => {
     const creditPlan = req.query['credit-plan'] || ''
 
     let priceId = process.env['PRICE_ID_' + creditPlan.toUpperCase()]
-
+    let quantity = 1
 
     const userInfo = await User.findOne({ _id: req.session.account.id }).exec()
     if (userInfo.stripe && userInfo.stripe.customerId && userInfo.stripe.priceId) {
       priceId = userInfo.stripe.priceId
+      quantity = userInfo.stripe.min
     }
 
     return res.status(200).json({
       priceId
     })
-
 
     if (!priceId) {
       return res.redirect('/')
