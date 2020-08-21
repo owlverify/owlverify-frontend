@@ -36,6 +36,10 @@ const paymentSchema = new mongoose.Schema({
     type: String,
     enum: status,
     default: 'unpaid',
+  },
+  quantity: {
+    type: Number,
+    default: 1
   }
 }, {
   timestamps: true
