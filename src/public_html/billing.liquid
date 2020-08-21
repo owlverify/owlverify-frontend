@@ -10,18 +10,25 @@
       </div>
 
       <div class="row">
-        {% if data.pricingPlan == 'custom' %}
-            Hello
-        {% endif %}
-        {% if data.pricingPlan == 'default' %}
         <section class="pricing" id="pricing">
           <div class="container">
             <div class="row">
-                <div class="columns">
-                  <p>Pricing is based on the number of email you validate irrespective of the number of users in your account.</p>
-                  <p>An validation credit is something that how much email you clean. 1 credit equals to 1 validation</p>
-                </div>
+              <div class="columns">
+                <p>Pricing is based on the number of email you validate irrespective of the number of users in your account.</p>
+                <p>An validation credit is something that how much email you clean. 1 credit equals to 1 validation</p>
               </div>
+            </div>
+
+            {% if data.pricingPlan == 'custom' %}
+              <div class="row price">
+                <p>You are on customized plan please enter how much credits you need.</p>
+                <form action="/billing/add-credit?credit-plan=dev" >
+                  <input type="number" name="credit-quantity" />
+                  <input type="submit" value="Add Credit"/>
+                </form>
+              </div>
+            {% endif %}
+            {% if data.pricingPlan == 'default' %}
               <div class="row price">
                 <div class="three columns">
                   <div>
@@ -54,9 +61,9 @@
                   </div>
                 </div>
               </div>
-            </div>
-          </section>
-          {% endif %}
+            {% endif %}
+          </div>
+        </section>
       </div>
     </div>
   </div>
