@@ -156,8 +156,19 @@ module.exports = app => {
   })
 
   app.get('/billing', async (req, res) => {
+    const data = {
+      pricingPlan: 'default'
+    }
+
+    const userInfo = await User.findOne({ _id: req.session.account.id }).exec()
+    if (userInfo.stripe && userInfo.stripe.customerId && userInfo.stripe.priceId) {
+      data.pricingPlan = 'custom'
+    }
+
     res.render('billing', render(req, {
-        title: 'Billing',
+      title: 'Billing',
+      page: 'billing',
+      data
     }))
   })
 

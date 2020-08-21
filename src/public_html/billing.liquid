@@ -5,14 +5,56 @@
     <div class="bar">
       <div class="row">
         <div class="twelve columns">
-          <h6><span style="padding-right:15px">All Files</span></h6>
-
-           <!--  SINGLE FILE -->
-          <form action="/files/upload" enctype="multipart/form-data" method="POST">
-             <input type="file" name="csvFile" />
-             <input type="submit" value="Upload a csv file"/>
-          </form>
+          <h6><span style="padding-right:15px">Billing</span></h6>
         </div>
+      </div>
+
+      <div class="row">
+        {% if data.pricingPlan === 'default' %}
+        <section class="pricing" id="pricing">
+          <div class="container">
+            <div class="row">
+                <div class="six columns offset-by-three">
+                  <h3 class="title">Pricing</h3>
+                  <p>Pricing is based on the number of email you validate irrespective of the number of users in your account.</p>
+                  <p>An validation credit is something that how much email you clean. 1 credit equals to 1 validation</p>
+                </div>
+              </div>
+              <div class="row price">
+                <div class="three columns">
+                  <div>
+                    <h4>Dev</h4>
+                    <p>10k validation</p>
+                    <h1>$10</h1>
+                    <p><a href="/billing/add-credit?credit-plan=dev" class="button button-primary">Signup</a></p>
+                  </div>
+                </div>
+                <div class="three columns">
+                  <div>
+                    <h4>Pro</h4>
+                    <p>100k validation</p>
+                    <h1>$90</h1>
+                    <p><a href="/billing/add-credit?credit-plan=pro" class="button button-primary">Signup</a></p>
+                  </div>
+                </div>
+                <div class="three columns">
+                  <div>
+                    <h4>Biz</h4>
+                    <p>1M validation</p>
+                    <h1>$800</h1>
+                    <p><a href="/billing/add-credit?credit-plan=biz" class="button button-primary">Signup</a></p>
+                  </div>
+                </div>
+                <div class="three columns">
+                  <div>
+                    <p><strong>More?</strong></p>
+                    <p><a href="http://github.com/owlverify/owlverify-frontend">Download</a> and self-host<br>or <a href="mailto:hello@owlhub.io">get in touch</a></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          {% endif %}
       </div>
     </div>
   </div>
