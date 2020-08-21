@@ -1,7 +1,5 @@
 const mongoose = require('mongoose')
-const crypto = require('crypto')
 
-const Recover = require('./recover.model')
 const File = require('./file.model')
 
 /**
@@ -30,6 +28,20 @@ const userSchema = new mongoose.Schema({
   credits: {
     type: Number,
     default: 0
+  },
+  stripe: {
+    customerId: {
+      type: String,
+      default: ''
+    },
+    priceId: {
+      type: String,
+      default: ''
+    },
+    min: {
+      type: Number,
+      default: 10000
+    }
   }
 }, {
   timestamps: true
@@ -68,15 +80,7 @@ userSchema.statics = {
         //reg_date: doc.reg_date
       }
 
-      /*
-      if (user.payid)
-        json.payid = user.payid
-
-      // Update last login
-      //await this.update({ email: email }, { $set: { ll: new Date() } }).exec()
-      */
       return fn(null, json)
-
     } catch (e) {
       console.log(e)
       return fn('There has been an internal error. Please try again later.')
@@ -104,13 +108,12 @@ userSchema.statics = {
         sort: {
           updatedAt: -1
         }
-      })
-        .exec()
+      }).exec()
 
     } catch (e) {
       console.log(e)
     } finally {
-      return fn(null, data)
+      fn(null, data)
     }
   }
 }

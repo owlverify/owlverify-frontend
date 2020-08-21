@@ -207,10 +207,10 @@ module.exports = app => {
     const session = await stripe.checkout.sessions.retrieve(sessionId)
     const payment = await stripe.paymentIntents.retrieve(session.payment_intent)
 
-    if (payment.amount_received == payment.amount) {
+    if (payment.amount_received === payment.amount) {
       const paymentInfo = await Payment.findOne({ ownerId: req.session.account.id, stripeSessionId: session.id }).exec()
       console.log(paymentInfo)
-      if (paymentInfo && paymentInfo.status == 'unpaid') {
+      if (paymentInfo && paymentInfo.status === 'unpaid') {
         const credits = process.env['QUANTITY_' + (paymentInfo.plan || '').toUpperCase()] || 0
         paymentInfo.status = 'paid'
         await paymentInfo.save()
