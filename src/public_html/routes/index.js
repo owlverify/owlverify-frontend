@@ -241,7 +241,7 @@ module.exports = app => {
         paymentInfo.status = 'paid'
         await paymentInfo.save()
 
-        await User.findOneAndUpdate(req.session.account.id, { $inc: { credits } }).exec()
+        await User.findOneAndUpdate(userInfo._id, { $inc: { credits } }).exec()
       }
     }
 
