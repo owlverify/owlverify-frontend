@@ -156,7 +156,7 @@ module.exports = app => {
   })
 
   app.get('/billing', async (req, res) => {
-    const data = {
+    let data = {
       pricingPlan: 'default'
     }
 
