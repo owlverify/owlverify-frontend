@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: roles,
     default: 'user',
+    trim: true,
   },
   credits: {
     type: Number,
