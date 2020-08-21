@@ -22,7 +22,7 @@
             {% if data.pricingPlan == 'custom' %}
               <div class="row price">
                 <p>You are on customized plan please enter how much credits you need.</p>
-                <form action="/billing/add-credit?credit-plan=dev" >
+                <form action="/billing/add-credit" >
                   <input type="number" name="credit-quantity" />
                   <input type="hidden" name="credit-plan" value="custom" />
                   <input type="submit" value="Add Credit"/>
