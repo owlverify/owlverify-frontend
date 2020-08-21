@@ -167,30 +167,34 @@ module.exports = app => {
       quantity = userInfo.stripe.min
     }
 
-    return res.status(200).json({
-      priceId
-    })
-
     if (!priceId) {
       return res.redirect('/')
     }
 
     const domainURL = req.protocol + '://' + req.get('host')
 
-    const session = await stripe.checkout.sessions.create({
+    const stripeParams = {
       payment_method_types: process.env.PAYMENT_METHODS.split(', '),
       mode: 'payment',
       locale: 'en',
       line_items: [
         {
           price: priceId,
-          quantity: 1 // process.env['QUANTITY_' + creditPlan.toUpperCase()]
+          quantity: quantity // process.env['QUANTITY_' + creditPlan.toUpperCase()]
         },
       ],
       // ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
       success_url: `${domainURL}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${domainURL}/billing/canceled`,
-    })
+    }
+
+    if (userInfo.stripe.customerId) {
+      stripeParams.customer = userInfo.stripe.customerId
+    } else {
+      stripeParams.customer_email = userInfo.email
+    }
+
+    const session = await stripe.checkout.sessions.create(stripeParams)
 
     await (new Payment({
       ownerId: req.session.account.id,
