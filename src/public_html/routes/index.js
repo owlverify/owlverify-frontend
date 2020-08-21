@@ -158,7 +158,18 @@ module.exports = app => {
   app.get('/billing/add-credit', async (req, res, next) => {
     const creditPlan = req.query['credit-plan'] || ''
 
-    const priceId = process.env['PRICE_ID_' + creditPlan.toUpperCase()]
+    let priceId = process.env['PRICE_ID_' + creditPlan.toUpperCase()]
+
+
+    const userInfo = await User.findOne({ _id: req.session.account.id }).exec()
+    if (userInfo.stripe && userInfo.stripe.customerId && userInfo.stripe.priceId) {
+      priceId = userInfo.stripe.priceId
+    }
+
+    return res.status(200).json({
+      priceId
+    })
+
 
     if (!priceId) {
       return res.redirect('/')
