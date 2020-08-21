@@ -155,6 +155,12 @@ module.exports = app => {
     res.download(file.outputPath)
   })
 
+  app.get('/billing', async (req, res) => {
+    res.render('billing', render(req, {
+        title: 'Billing',
+    }))
+  })
+
   app.get('/billing/add-credit', async (req, res, next) => {
     const creditPlan = req.query['credit-plan'] || ''
     const creditQuantity = parseInt(req.query['credit-quantity']) || 0
