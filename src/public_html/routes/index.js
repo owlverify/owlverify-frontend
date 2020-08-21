@@ -157,12 +157,14 @@ module.exports = app => {
 
   app.get('/billing', async (req, res) => {
     let data = {
-      pricingPlan: 'default'
+      pricingPlan: 'default',
+
     }
 
     const userInfo = await User.findOne({ _id: req.session.account.id }).exec()
     if (userInfo.stripe && userInfo.stripe.customerId && userInfo.stripe.priceId) {
       data.pricingPlan = 'custom'
+      data.minQuantity = userInfo.stripe.min
     }
 
     res.render('billing', render(req, {
