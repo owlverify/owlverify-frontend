@@ -157,14 +157,19 @@ module.exports = app => {
 
   app.get('/billing/add-credit', async (req, res, next) => {
     const creditPlan = req.query['credit-plan'] || ''
+    const creditQuantity = parseInt(req.query['credit-quantity']) || 0
 
     let priceId = process.env['PRICE_ID_' + creditPlan.toUpperCase()]
-    let quantity = 1
+    let quantity = 1 // process.env['QUANTITY_' + creditPlan.toUpperCase()]
 
     const userInfo = await User.findOne({ _id: req.session.account.id }).exec()
     if (userInfo.stripe && userInfo.stripe.customerId && userInfo.stripe.priceId) {
       priceId = userInfo.stripe.priceId
       quantity = userInfo.stripe.min
+
+      if (quantity < creditQuantity) {
+        quantity = creditQuantity
+      }
     }
 
     if (!priceId) {
@@ -180,7 +185,7 @@ module.exports = app => {
       line_items: [
         {
           price: priceId,
-          quantity: quantity // process.env['QUANTITY_' + creditPlan.toUpperCase()]
+          quantity: quantity
         },
       ],
       // ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
