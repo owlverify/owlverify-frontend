@@ -24,6 +24,7 @@
                 <p>You are on customized plan please enter how much credits you need.</p>
                 <form action="/billing/add-credit?credit-plan=dev" >
                   <input type="number" name="credit-quantity" />
+                  <input type="hidden" name="credit-plan" value="custom" />
                   <input type="submit" value="Add Credit"/>
                 </form>
               </div>
