@@ -4,7 +4,10 @@ var fs = require('fs')
 var { Parser } = require('json2csv')
 var OWLHUB = require('owlhub-sdk')
 
-var OwlVerify = new OWLHUB.OwlVerify({ apiVersion: '2020-05-10' })
+var OwlVerify = new OWLHUB.OwlVerify({
+  region: process.env.OWLHUB_REGION || process.env.AWS_DEFAULT_REGION,
+  apiVersion: '2020-05-10'
+})
 
 const filesData = {}
 
