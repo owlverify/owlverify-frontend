@@ -11,8 +11,6 @@ var OwlVerify = new OWLHUB.OwlVerify({
 
 const filesData = {}
 
-var dataArr = []
-
 function queue (worker, work, concurrency, options) {
   console.log('started, with concurrency=' + concurrency)
   return new Promise(function (resolve, reject) {
@@ -94,12 +92,14 @@ module.exports = async (file) => {
 
         const csv = json2csvParser.parse(filesData[fileName])
 
-        let outputPath = `/tmp/${file.ownerId}/output-${file.name.replace(/\.[^/.]+$/, "")}-` + Date.now() + '.csv';
+        let outputPath = `/tmp/${file.ownerId}/output-${file.name.replace(/\.[^/.]+$/, '')}-` + Date.now() + '.csv'
         fs.writeFileSync(outputPath, csv)
 
         file.status = 'verified'
         file.outputPath = outputPath
         await file.save()
+
+        delete filesData[fileName]
       })
     })
 }
